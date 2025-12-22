@@ -1,11 +1,13 @@
+import Banner from '../../components/Home/Banner'
 import Plants from '../../components/Home/Plants'
 
 const Home = () => {
   return (
-    <div>
+    <main>
+      <Banner />
       <Plants />
-      {/* More components */}
-    </div>
+      {/* Other home sections will go here */}
+    </main>
   )
 }
 
