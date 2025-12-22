@@ -1,9 +1,14 @@
 import { useNavigate } from 'react-router'
 import { HiHome, HiArrowLeft } from 'react-icons/hi'
 import { FaGraduationCap } from 'react-icons/fa'
+import { useEffect } from 'react'
 
 const ErrorPage = () => {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section className='min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-12'>
