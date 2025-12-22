@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
         path: '/all-scholarships',
         element: <AllScholarships />,
       },
+       {
+        path: '/matches',
+        element: <AllScholarships />,
+      },
     ],
 
     

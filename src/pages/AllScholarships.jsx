@@ -5,6 +5,7 @@ import { FaSearch, FaFilter, FaTimes } from 'react-icons/fa'
 import Container from '../components/Shared/Container'
 import ScholarshipCard from '../components/Home/ScholarshipCard'
 import LoadingSpinner from '../components/Shared/LoadingSpinner'
+import { useEffect } from 'react'
 
 const AllScholarships = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -12,6 +13,10 @@ const AllScholarships = () => {
   const [selectedSubject, setSelectedSubject] = useState('All')
   const [selectedCountry, setSelectedCountry] = useState('All')
   const [showFilters, setShowFilters] = useState(false)
+
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
 
   const { data: scholarships = [], isLoading } = useQuery({
     queryKey: ['all-scholarships'],
