@@ -1,11 +1,11 @@
 import Banner from '../../components/Home/Banner'
-import Plants from '../../components/Home/Plants'
+import TopScholarships from '../../components/Home/TopScholarships'
 
 const Home = () => {
   return (
     <main>
       <Banner />
-      <Plants />
+      <TopScholarships />
       {/* Other home sections will go here */}
     </main>
   )
