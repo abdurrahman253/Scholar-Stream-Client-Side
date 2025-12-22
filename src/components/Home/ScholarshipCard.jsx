@@ -2,74 +2,57 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ScholarshipCard = ({ scholarship }) => {
-  const {
-    _id,
-    universityName,
-    universityImage,
-    universityCity,
-    universityCountry,
-    scholarshipCategory,
-    applicationFees,
-  } = scholarship;
+  const { _id, universityName, universityImage, universityCity, universityCountry, scholarshipCategory, applicationFees } = scholarship;
 
   return (
-    <div className="h-full">
-      <Link to={`/scholarship/${_id}`} className="block h-full">
-        <div className="bg-white rounded-xl md:rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full flex flex-col">
-          
-          {/* University Image */}
-          <div className="relative h-32 sm:h-40 md:h-48 overflow-hidden">
-            <img
-              src={universityImage}
-              alt={universityName}
-              className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-            />
-            {/* Scholarship Category Badge - Mobile Responsive */}
-            <div className="absolute top-2 left-2 md:top-4 md:left-4">
-              <span className={`px-2 py-0.5 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold text-white shadow-lg ${
-                scholarshipCategory === 'Full fund' 
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
-                  : 'bg-gradient-to-r from-indigo-500 to-purple-600'
-              }`}>
-                {scholarshipCategory}
-              </span>
-            </div>
-          </div>
-
-          {/* Card Content */}
-          <div className="p-3 md:p-6 flex flex-col flex-grow">
-            <h3 className="font-bold text-sm md:text-lg text-gray-900 line-clamp-1 md:line-clamp-2 mb-1 md:mb-2">
-              {universityName}
-            </h3>
-
-            {/* Location */}
-            <div className="flex items-center text-gray-500 mb-2 md:mb-4">
-              <svg className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="text-[10px] md:text-sm truncate">
-                {universityCity}, {universityCountry}
-              </span>
-            </div>
-
-            {/* Application Fee & Button */}
-            <div className="mt-auto">
-              <p className="text-[11px] md:text-sm text-gray-600 mb-2 md:mb-4">
-                Fee:{' '}
-                <span className="font-bold text-indigo-600">
-                  {applicationFees === 0 ? 'Free' : `$${applicationFees}`}
-                </span>
-              </p>
-
-              {/* View Details Button - Smaller on Mobile */}
-              <button className="w-full py-2 md:py-3 px-2 md:px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs md:text-sm font-semibold rounded-lg md:rounded-xl transition-all duration-200">
-                Details
-              </button>
-            </div>
-          </div>
+    <div className="group h-full bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col overflow-hidden relative">
+      
+      {/* Top Image Section */}
+      <div className="relative h-44 md:h-52 overflow-hidden">
+        <img
+          src={universityImage}
+          alt={universityName}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute top-3 left-3">
+          <span className={`backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1 rounded-lg text-[10px] md:text-xs font-bold text-white uppercase tracking-wider shadow-xl ${
+            scholarshipCategory === 'Full fund' ? 'bg-emerald-500/40' : 'bg-indigo-500/40'
+          }`}>
+            {scholarshipCategory}
+          </span>
         </div>
-      </Link>
+      </div>
+
+      {/* Card Body */}
+      <div className="p-4 md:p-6 flex flex-grow flex-col">
+        <h3 className="font-bold text-base md:text-xl text-gray-900 line-clamp-1 mb-2 group-hover:text-indigo-600 transition-colors">
+          {universityName}
+        </h3>
+
+        <div className="flex items-center text-gray-400 text-xs md:text-sm mb-4 italic font-medium">
+          <svg className="w-3.5 h-3.5 mr-1.5 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+          </svg>
+          {universityCity}, {universityCountry}
+        </div>
+
+        {/* Footer with Final Glow Button */}
+        <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">App Fee</span>
+            <span className="font-extrabold text-indigo-600 text-sm md:text-lg">
+              {applicationFees === 0 ? 'Free' : `$${applicationFees}`}
+            </span>
+          </div>
+          
+          <Link 
+            to={`/scholarship/${_id}`}
+            className="btn-neon-glow inline-flex items-center justify-center px-6 py-2.5 text-white text-xs md:text-sm font-bold uppercase rounded-xl transition-all shadow-lg"
+          >
+            Details
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { HiOutlineX } from 'react-icons/hi'
 import { FaGraduationCap } from 'react-icons/fa'
@@ -34,25 +34,37 @@ const Navbar = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const navLinks = (
-    <>
-      <Link
-        to="/"
-        className="block w-full text-left px-5 py-3.5 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl font-medium transition-all"
-        onClick={() => setIsOpen(false)}
-      >
-        Home
-      </Link>
-     <Link
-  to="/all-scholarships"
-  className="block w-full text-left px-5 py-3.5 text-sm md:text-base text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl font-medium transition-all whitespace-nowrap"
-  onClick={() => setIsOpen(false)}
->
-  All Scholarships
-</Link>
-    </>
-  )
+ const navLinks = (
+  <>
+    <NavLink
+      to="/"
+      onClick={() => setIsOpen(false)}
+      className={({ isActive }) =>
+        `block w-full md:w-auto text-left px-5 py-2.5 rounded-xl font-medium transition-all ${
+          isActive
+            ? 'bg-indigo-50 text-indigo-600 shadow-sm ring-1 ring-indigo-100' // Active Style
+            : 'text-gray-700 hover:text-indigo-600 hover:bg-indigo-50' // Normal Style
+        }`
+      }
+    >
+      Home
+    </NavLink>
 
+    <NavLink
+      to="/all-scholarships"
+      onClick={() => setIsOpen(false)}
+      className={({ isActive }) =>
+        `block w-full md:w-auto text-left px-5 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
+          isActive
+            ? 'bg-indigo-50 text-indigo-600 shadow-sm ring-1 ring-indigo-100' // Active Style
+            : 'text-gray-700 hover:text-indigo-600 hover:bg-indigo-50' // Normal Style
+        }`
+      }
+    >
+      All Scholarships
+    </NavLink>
+  </>
+)
   return (
     <>
       {/* Fixed Navbar */}
@@ -118,20 +130,27 @@ const Navbar = () => {
                       </div>
                     </div>
                   ) : (
-                    <>
-                      <Link
-                        to="/login"
-                        className="px-4 sm:px-5 py-2 text-gray-700 font-medium hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition"
-                      >
-                        Login
-                      </Link>
-                      <Link
-                        to="/signup"
-                        className="px-5 sm:px-6 py-2 text-white font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-lg shadow-md hover:shadow-lg transition"
-                      >
-                        Register
-                      </Link>
-                    </>
+                   <div className="flex items-center gap-3">
+                 {/* Login Button */}
+                  <Link to="/login" className="nav-auth-btn group">
+                  <div className="nav-auth-inner">
+                 <svg
+                className="w-5 h-5 fill-indigo-400 group-hover:fill-white transition-colors"
+                 viewBox="0 0 24 24"
+                        >
+                <path d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z" />
+                  </svg>
+                <span>Login</span>
+                </div>
+               </Link>
+
+               {/* Register Button */}
+               <Link to="/signup" className="nav-auth-btn group !bg-indigo-600">
+              <div className="nav-auth-inner !bg-indigo-600 group-hover:!bg-indigo-700">
+                  <span>Register</span>
+                 </div>
+                   </Link>
+                </div>
                   )}
                 </div>
 
@@ -183,13 +202,16 @@ const Navbar = () => {
                     <p className="text-sm text-gray-600 truncate max-w-[200px]">{user.email}</p>
                   </div>
                 </div>
-                <Link
-                  to="/dashboard"
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full text-center py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg mb-3 hover:shadow-xl transition"
-                >
+               <NavLink 
+                 to="/dashboard" 
+                 className={({ isActive }) => 
+                 `block px-4 py-2.5 transition-all ${
+                  isActive ? 'bg-indigo-50 text-indigo-600 font-bold' : 'text-gray-700 hover:bg-indigo-50'
+                   }`
+                     }
+                  >
                   Dashboard
-                </Link>
+               </NavLink>
                 <button
                   onClick={() => {
                     logOut()
