@@ -11,8 +11,12 @@ const SuccessStories = () => {
       degree: "Masters in Law",
       amount: "$55,000",
       img: "https://i.postimg.cc/PxW374Kn/Maddie-C.webp",
+<<<<<<< HEAD
       quote: "ScholarStream transformed my dream of studying at Oxford into reality!",
       color: "142, 249, 252"
+=======
+      quote: "ScholarStream transformed my dream of studying at Oxford into reality. The platform made finding the perfect scholarship effortless!"
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
     },
     { 
       name: "Ariful Islam", 
@@ -21,8 +25,12 @@ const SuccessStories = () => {
       degree: "PhD in Computer Science",
       amount: "$52,000",
       img: "https://i.postimg.cc/fWHjRp3L/Aaron-H.webp",
+<<<<<<< HEAD
       quote: "The application tracking kept me organized throughout my journey!",
       color: "142, 252, 204"
+=======
+      quote: "The application tracking feature kept me organized throughout my journey. I'm now pursuing my PhD at my dream institution!"
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
     },
     { 
       name: "Tanvir Hasan", 
@@ -31,8 +39,12 @@ const SuccessStories = () => {
       degree: "MBA",
       amount: "$60,000",
       img: "https://i.postimg.cc/k4T8DRgw/Collin-L.webp",
+<<<<<<< HEAD
       quote: "ScholarStream guided me every step. Now I'm at Stanford!",
       color: "215, 252, 142"
+=======
+      quote: "From application to acceptance, ScholarStream guided me every step. Now I'm at Stanford pursuing my MBA!"
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
     },
     { 
       name: "Nadia Akter", 
@@ -41,8 +53,12 @@ const SuccessStories = () => {
       degree: "Masters in Public Health",
       amount: "$50,000",
       img: "https://i.postimg.cc/8P2vFSNm/Krrisha-P.webp",
+<<<<<<< HEAD
       quote: "Found scholarships I never knew existed. Harvard was the beginning!",
       color: "252, 208, 142"
+=======
+      quote: "The filtering options helped me find scholarships I never knew existed. Harvard was just the beginning!"
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
     },
     { 
       name: "M. Abdullah", 
@@ -51,8 +67,12 @@ const SuccessStories = () => {
       degree: "Masters in Economics",
       amount: "$48,000",
       img: "https://i.postimg.cc/CKNn6nk5/Matteo-P.webp",
+<<<<<<< HEAD
       quote: "Connected me with opportunities that perfectly matched my profile.",
       color: "252, 142, 239"
+=======
+      quote: "ScholarStream's comprehensive database connected me with opportunities that perfectly matched my profile."
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
     },
     { 
       name: "Sumaiya Khan", 
@@ -61,6 +81,7 @@ const SuccessStories = () => {
       degree: "PhD in Engineering",
       amount: "$45,000",
       img: "https://i.postimg.cc/9FnpJKVs/Nour-I.webp",
+<<<<<<< HEAD
       quote: "User-friendly interface made my search stress-free!",
       color: "204, 142, 252"
     },
@@ -83,6 +104,9 @@ const SuccessStories = () => {
       img: "https://i.postimg.cc/XJqqHHnq/Gella-H.webp",
       quote: "ScholarStream made my international study dreams come true!",
       color: "142, 202, 252"
+=======
+      quote: "The platform's user-friendly interface made my scholarship search stress-free. Cambridge was worth every effort!"
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
     }
   ]
 
@@ -98,7 +122,11 @@ const SuccessStories = () => {
         {/* Header */}
         <div className='text-center mb-16 relative z-10'>
           <div className='inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full border border-indigo-200 mb-4'>
+<<<<<<< HEAD
             <HiSparkles className='w-5 h-5 text-yellow-500 animate-pulse' />
+=======
+            <HiSparkles className='w-5 h-5 text-yellow-500' />
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
             <span className='text-sm font-semibold text-gray-700'>Success Stories</span>
           </div>
           
@@ -129,6 +157,7 @@ const SuccessStories = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* 3D Rotating Cards */}
         <div className='success-wrapper'>
           <div className='success-inner' style={{ '--quantity': stories.length }}>
@@ -206,6 +235,86 @@ const SuccessStories = () => {
 
         {/* CTA Section */}
         <div className='mt-20 text-center relative z-10'>
+=======
+        {/* Stories Grid */}
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10'>
+          {stories.map((story, index) => (
+            <div
+              key={index}
+              className='group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-indigo-200'
+              style={{
+                animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+              }}
+            >
+              {/* Gradient Overlay */}
+              <div className='absolute top-0 left-0 right-0 h-32 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600'></div>
+              
+              {/* Content */}
+              <div className='relative p-6'>
+                {/* Profile Section */}
+                <div className='flex flex-col items-center mb-4'>
+                  {/* Image with Badge */}
+                  <div className='relative mb-4'>
+                    <div className='absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full blur-md opacity-75'></div>
+                    <img
+                      src={story.img}
+                      alt={story.name}
+                      className='relative w-24 h-24 rounded-full object-cover border-4 border-white shadow-xl'
+                    />
+                    {/* Success Badge */}
+                    <div className='absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white'>
+                      <FaCheckCircle className='w-5 h-5 text-white' />
+                    </div>
+                  </div>
+
+                  {/* Name & University */}
+                  <h3 className='text-xl font-bold text-gray-900 text-center'>
+                    {story.name}
+                  </h3>
+                  <div className='flex items-center gap-2 mt-2 text-indigo-600'>
+                    <FaGraduationCap className='w-4 h-4' />
+                    <p className='text-sm font-semibold'>{story.uni}</p>
+                  </div>
+                  <p className='text-xs text-gray-500 mt-1'>{story.country}</p>
+                </div>
+
+                {/* Details */}
+                <div className='space-y-3 mb-4'>
+                  <div className='flex items-center justify-between px-3 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg'>
+                    <span className='text-xs text-gray-600'>Degree</span>
+                    <span className='text-sm font-semibold text-gray-900'>{story.degree}</span>
+                  </div>
+                  <div className='flex items-center justify-between px-3 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg'>
+                    <span className='text-xs text-gray-600'>Award</span>
+                    <span className='text-sm font-bold text-green-700'>{story.amount}</span>
+                  </div>
+                </div>
+
+                {/* Quote */}
+                <div className='relative bg-gray-50 rounded-xl p-4 mb-4'>
+                  <FaQuoteLeft className='absolute top-3 left-3 w-4 h-4 text-indigo-300' />
+                  <p className='text-sm text-gray-700 leading-relaxed pl-6 italic'>
+                    "{story.quote}"
+                  </p>
+                </div>
+
+                {/* Rating */}
+                <div className='flex items-center justify-center gap-1 text-yellow-400'>
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} className='w-4 h-4' />
+                  ))}
+                </div>
+              </div>
+
+              {/* Hover Effect Border */}
+              <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500' style={{ padding: '2px', zIndex: -1 }}></div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA Section */}
+        <div className='mt-16 text-center relative z-10'>
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
           <div className='inline-flex flex-col sm:flex-row items-center gap-4'>
             <a
               href='/all-scholarships'
@@ -223,6 +332,7 @@ const SuccessStories = () => {
         </div>
       </Container>
 
+<<<<<<< HEAD
       {/* Custom Styles */}
       <style>{`
         .success-wrapper {
@@ -306,6 +416,18 @@ const SuccessStories = () => {
             --w: 200px;
             --h: 310px;
             --translateZ: 350px;
+=======
+      {/* Custom Animation */}
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
           }
         }
       `}</style>

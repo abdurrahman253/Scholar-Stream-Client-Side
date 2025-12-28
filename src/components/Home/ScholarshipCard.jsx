@@ -46,7 +46,11 @@ const ScholarshipCard = ({ scholarship }) => {
           </div>
           
           <Link 
+<<<<<<< HEAD
             to={`/scholarships/${_id}`}
+=======
+            to={`/scholarship/${_id}`}
+>>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
             className="btn-neon-glow inline-flex items-center justify-center px-6 py-2.5 text-white text-xs md:text-sm font-bold uppercase rounded-xl transition-all shadow-lg"
           >
             Details
