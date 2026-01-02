@@ -23,7 +23,7 @@ const LoadingSpinner = ({ smallHeight }) => {
         {/* Center Icon */}
         <div className='relative w-32 h-32 flex items-center justify-center'>
           <div className='bg-gradient-to-br from-indigo-600 to-purple-600 p-4 rounded-full shadow-lg animate-bounce-slow'>
-            <FaGraduationCap className='w-8 h-8 text-white' />
+            <FaGraduationCap className='w-8 h-8 text-gray-900' />
           </div>
         </div>
       </div>

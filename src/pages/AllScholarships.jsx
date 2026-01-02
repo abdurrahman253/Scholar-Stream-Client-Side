@@ -98,12 +98,12 @@ const AllScholarships = () => {
           <div className='mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className='md:hidden inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg'
+              className='md:hidden inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-900 font-semibold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg'
             >
               <FaFilter className='w-5 h-5' />
               <span>Filters</span>
               {activeFiltersCount > 0 && (
-                <span className='px-3 py-1 bg-white/20 text-white text-sm font-bold rounded-full'>
+                <span className='px-3 py-1 bg-white/20 text-gray-900 text-sm font-bold rounded-full'>
                   {activeFiltersCount}
                 </span>
               )}
@@ -183,7 +183,7 @@ const AllScholarships = () => {
               <p className='text-gray-600 text-lg mb-10 max-w-md mx-auto'>Try adjusting your search term or filters to see more results</p>
               <button
                 onClick={resetFilters}
-                className='px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-xl'
+                className='px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-900 font-bold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-xl'
               >
                 Clear Filters & Search Again
               </button>

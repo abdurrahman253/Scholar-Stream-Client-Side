@@ -6,12 +6,14 @@ import { toast } from 'react-hot-toast'
 import { TbFidgetSpinner } from 'react-icons/tb'
 import { useForm } from 'react-hook-form'
 import { imageUpload } from '../../utils'
+import { saveOrUpdateUser } from '../../utils/api'
 
 const SignUp = () => {
   const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state || '/'
+ 
 
   // React Hook Form
   const {
@@ -20,39 +22,60 @@ const SignUp = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = async data => {
-    const { name, image, email, password } = data
-    const imageFile = image[0]
+  const onSubmit = async (data) => {
+  const { name, image, email, password } = data;
+  const imageFile = image[0];
 
-    try {
-      const imageURL = await imageUpload(imageFile)
+  try {
+    const imageURL = await imageUpload(imageFile);
 
-      // User Registration
-      await createUser(email, password)
+    
+    const result = await createUser(email, password);
+    const newUser = result.user;
 
-      // Save username & profile photo
-      await updateUserProfile(name, imageURL)
+    await updateUserProfile(name, imageURL);
 
-      navigate(from, { replace: true })
-      toast.success('Welcome to ScholarStream! 🎓')
-    } catch (err) {
-      console.log(err)
-      toast.error(err?.message)
-    }
+    await saveOrUpdateUser({
+      name: name,
+      email: newUser.email,
+      photoURL: imageURL,
+    });
+
+    navigate(from, { replace: true });
+    toast.success('Welcome to ScholarStream! 🎓');
+  } catch (err) {
+    console.error(err);
+    toast.error(err?.message || 'Signup failed');
   }
+};
 
   // Handle Google Signin
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle()
+ const handleGoogleSignIn = async () => {
+  try {
+    const result = await signInWithGoogle()
+    const loggedInUser = result.user
 
-      navigate(from, { replace: true })
-      toast.success('Welcome to ScholarStream! 🎓')
-    } catch (err) {
-      console.log(err)
-      toast.error(err?.message)
-    }
+    // ✅ Get fresh Google photo
+    const googleProviderData = loggedInUser.providerData.find(
+      (provider) => provider.providerId === 'google.com'
+    )
+
+    const photoURL = googleProviderData?.photoURL || ''
+
+    await saveOrUpdateUser({
+      name: loggedInUser?.displayName || 'Anonymous',
+      email: loggedInUser?.email,
+      photoURL: photoURL,
+    })
+
+    navigate(from, { replace: true })
+    toast.success('Welcome back! 🎓')
+  } catch (err) {
+    console.error(err)
+    toast.error(err?.message || 'Google sign in failed')
   }
+}
+
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-12'>
@@ -64,7 +87,7 @@ const SignUp = () => {
               <div className='relative'>
                 <div className='absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-75'></div>
                 <div className='relative bg-gradient-to-br from-indigo-600 to-purple-600 p-3 rounded-xl shadow-lg'>
-                  <FaGraduationCap className='w-8 h-8 text-white' />
+                  <FaGraduationCap className='w-8 h-8 text-gray-900' />
                 </div>
               </div>
               <div className='flex flex-col items-start'>
@@ -122,7 +145,7 @@ const SignUp = () => {
                     type='file'
                     id='image'
                     accept='image/*'
-                    className='block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-indigo-600 file:to-purple-600 file:text-white hover:file:from-indigo-700 hover:file:to-purple-700 file:cursor-pointer file:transition-all file:duration-200 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200 py-2.5'
+                    className='block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-indigo-600 file:to-purple-600 file:text-gray-900 hover:file:from-indigo-700 hover:file:to-purple-700 file:cursor-pointer file:transition-all file:duration-200 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200 py-2.5'
                     {...register('image')}
                   />
                 </div>
@@ -200,7 +223,7 @@ const SignUp = () => {
                 onClick={handleSubmit(onSubmit)}
                 disabled={loading}
                 type='button'
-                className='w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
+                className='w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-gray-900 font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
               >
                 {loading ? (
                   <>

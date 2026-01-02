@@ -6,6 +6,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { FaGraduationCap, FaEnvelope, FaLock } from 'react-icons/fa'
 import { TbFidgetSpinner } from 'react-icons/tb'
 import { useForm } from 'react-hook-form'
+import { saveOrUpdateUser } from '../../utils/api'
 
 const Login = () => {
   const { signIn, signInWithGoogle, loading, user, setLoading } = useAuth()
@@ -13,6 +14,7 @@ const Login = () => {
   const location = useLocation()
 
   const from = location.state || '/'
+ 
 
   // React Hook Form
   const {
@@ -24,35 +26,54 @@ const Login = () => {
   if (loading) return <LoadingSpinner />
   if (user) return <Navigate to={from} replace={true} />
 
-  // form submit handler
-  const onSubmit = async data => {
-    const { email, password } = data
+ const onSubmit = async (data) => {
+  const { email, password } = data;
 
-    try {
-      // User Login
-      await signIn(email, password)
+  try {
+    // signIn থেকে user রিটার্ন নাও
+    const result = await signIn(email, password);
+    const loggedInUser = result.user; // এটা Firebase থেকে আসবে
 
-      navigate(from, { replace: true })
-      toast.success('Welcome back! 🎓')
-    } catch (err) {
-      console.log(err)
-      toast.error(err?.message)
-    }
+    await saveOrUpdateUser({
+      name: loggedInUser?.displayName || 'Anonymous',
+      email: loggedInUser?.email,
+      photoURL: loggedInUser?.photoURL || '',
+    });
+
+    navigate(from, { replace: true });
+    toast.success('Welcome back! 🎓');
+  } catch (err) {
+    console.error(err);
+    toast.error(err?.message || 'Login failed');
   }
+};
 
-  // Handle Google Signin
-  const handleGoogleSignIn = async () => {
-    try {
-      // User Registration using google
-      await signInWithGoogle()
-      navigate(from, { replace: true })
-      toast.success('Welcome back! 🎓')
-    } catch (err) {
-      console.log(err)
-      setLoading(false)
-      toast.error(err?.message)
-    }
+const handleGoogleSignIn = async () => {
+  try {
+    const result = await signInWithGoogle()
+    const loggedInUser = result.user
+
+    // ✅ Get fresh Google photo
+    const googleProviderData = loggedInUser.providerData.find(
+      (provider) => provider.providerId === 'google.com'
+    )
+
+    const photoURL = googleProviderData?.photoURL || ''
+
+    await saveOrUpdateUser({
+      name: loggedInUser?.displayName || 'Anonymous',
+      email: loggedInUser?.email,
+      photoURL: photoURL,
+    })
+
+    navigate(from, { replace: true })
+    toast.success('Welcome back! 🎓')
+  } catch (err) {
+    console.error(err)
+    toast.error(err?.message || 'Google sign in failed')
   }
+}
+
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-12'>
@@ -64,7 +85,7 @@ const Login = () => {
               <div className='relative'>
                 <div className='absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-75'></div>
                 <div className='relative bg-gradient-to-br from-indigo-600 to-purple-600 p-3 rounded-xl shadow-lg'>
-                  <FaGraduationCap className='w-8 h-8 text-white' />
+                  <FaGraduationCap className='w-8 h-8 text-gray-900' />
                 </div>
               </div>
               <div className='flex flex-col items-start'>
@@ -152,7 +173,7 @@ const Login = () => {
               onClick={handleSubmit(onSubmit)}
               disabled={loading}
               type='button'
-              className='w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
+              className='w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-gray-900 font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
             >
               {loading ? (
                 <>

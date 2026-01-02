@@ -23,7 +23,7 @@ const Footer = () => {
                 <div className="relative flex-shrink-0">
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl blur-md opacity-70"></div>
                   <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 p-2.5 rounded-xl shadow-lg">
-                    <FaGraduationCap className="w-6 h-6 text-white" />
+                    <FaGraduationCap className="w-6 h-6 text-gray-900" />
                   </div>
                 </div>
                 <div className="flex flex-col leading-tight">
@@ -49,7 +49,7 @@ const Footer = () => {
                 <a
                   key={idx}
                   href={href}
-                  className="w-9 h-9 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm"
+                  className="w-9 h-9 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-indigo-600 hover:text-gray-900 transition-all shadow-sm"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -109,7 +109,7 @@ const Footer = () => {
                   placeholder="Enter email"
                   className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
-                <button className="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md">
+                <button className="w-full py-2.5 bg-indigo-600 text-gray-900 font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md">
                   Subscribe
                 </button>
               </form>

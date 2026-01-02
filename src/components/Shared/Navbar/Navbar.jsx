@@ -77,7 +77,7 @@ const Navbar = () => {
                 <div className="relative flex-shrink-0">
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg blur-md group-hover:blur-lg transition-all duration-500 opacity-70"></div>
                   <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 p-2 rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-500">
-                    <FaGraduationCap className="w-5 h-5 text-white sm:w-6 sm:h-6" />
+                    <FaGraduationCap className="w-5 h-5 text-gray-900 sm:w-6 sm:h-6" />
                   </div>
                 </div>
                 <div className="flex flex-col leading-tight">
@@ -123,7 +123,7 @@ const Navbar = () => {
                           <Link to="/dashboard" className="block px-4 py-2.5 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
                             Dashboard
                           </Link>
-                          <button onClick={logOut} className="w-full text-left px-4 py-2.5 text-red-600 hover:bg-red-50">
+                          <button onClick={logOut} className="w-full text-left px-4 py-2.5 text-pink-600 hover:bg-red-50">
                             Logout
                           </button>
                         </div>
@@ -217,7 +217,7 @@ const Navbar = () => {
                     logOut()
                     setIsOpen(false)
                   }}
-                  className="w-full py-4 text-red-600 font-semibold hover:bg-red-50 rounded-xl transition"
+                  className="w-full py-4 text-pink-600 font-semibold hover:bg-red-50 rounded-xl transition"
                 >
                   Logout
                 </button>
@@ -234,7 +234,7 @@ const Navbar = () => {
                 <Link
                   to="/signup"
                   onClick={() => setIsOpen(false)}
-                  className="block w-full text-center py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition"
+                  className="block w-full text-center py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-900 font-bold rounded-xl shadow-lg hover:shadow-xl transition"
                 >
                   Register
                 </Link>

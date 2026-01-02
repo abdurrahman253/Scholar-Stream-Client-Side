@@ -87,7 +87,7 @@ const TrustSection = () => {
                 with <span className="text-indigo-600">ScholarStream</span>. You can too!
               </h4>
               
-              <Link to="/all-scholarships" className="px-12 py-5 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 hover:scale-105 transition-all duration-300 shadow-xl shadow-indigo-200 active:scale-95">
+              <Link to="/all-scholarships" className="px-12 py-5 bg-indigo-600 text-gray-900 font-bold rounded-2xl hover:bg-indigo-700 hover:scale-105 transition-all duration-300 shadow-xl shadow-indigo-200 active:scale-95">
                 Check My Matches
               </Link>
             </div>

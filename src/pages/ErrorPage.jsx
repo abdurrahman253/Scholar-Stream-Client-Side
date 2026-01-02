@@ -33,7 +33,7 @@ const ErrorPage = () => {
             <div className='relative'>
               <div className='absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full blur-md opacity-75 animate-pulse'></div>
               <div className='relative bg-gradient-to-br from-indigo-600 to-purple-600 p-6 rounded-full shadow-lg'>
-                <FaGraduationCap className='w-12 h-12 text-white' />
+                <FaGraduationCap className='w-12 h-12 text-gray-900' />
               </div>
             </div>
           </div>
@@ -68,7 +68,7 @@ const ErrorPage = () => {
 
             <button
               onClick={() => navigate('/')}
-              className='group flex items-center justify-center gap-2 px-6 py-3 text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl font-medium w-full sm:w-auto'
+              className='group flex items-center justify-center gap-2 px-6 py-3 text-gray-900 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl font-medium w-full sm:w-auto'
             >
               <HiHome className='w-5 h-5 group-hover:scale-110 transition-transform duration-300' />
               <span>Back to Home</span>

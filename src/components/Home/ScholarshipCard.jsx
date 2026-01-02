@@ -15,7 +15,7 @@ const ScholarshipCard = ({ scholarship }) => {
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute top-3 left-3">
-          <span className={`backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1 rounded-lg text-[10px] md:text-xs font-bold text-white uppercase tracking-wider shadow-xl ${
+          <span className={`backdrop-blur-md bg-white/20 border border-white/30 px-3 py-1 rounded-lg text-[10px] md:text-xs font-bold text-gray-900 uppercase tracking-wider shadow-xl ${
             scholarshipCategory === 'Full fund' ? 'bg-emerald-500/40' : 'bg-indigo-500/40'
           }`}>
             {scholarshipCategory}
@@ -46,12 +46,8 @@ const ScholarshipCard = ({ scholarship }) => {
           </div>
           
           <Link 
-<<<<<<< HEAD
             to={`/scholarships/${_id}`}
-=======
-            to={`/scholarship/${_id}`}
->>>>>>> 2461f5c599d8c9fe7be0490cb7d77175d066b080
-            className="btn-neon-glow inline-flex items-center justify-center px-6 py-2.5 text-white text-xs md:text-sm font-bold uppercase rounded-xl transition-all shadow-lg"
+            className="btn-neon-glow inline-flex items-center justify-center px-6 py-2.5 text-gray-900 text-xs md:text-sm font-bold uppercase rounded-xl transition-all shadow-lg"
           >
             Details
           </Link>

@@ -37,7 +37,7 @@ const HowItWorks = () => {
   {steps.map((step) => (
     <div key={step.id} className="work-card">
       {/* Step Number Badge */}
-      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-indigo-200">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-gray-900 font-bold text-xl mb-6 shadow-lg shadow-indigo-200">
         {step.id}
       </div>
       
@@ -57,7 +57,7 @@ const HowItWorks = () => {
 </div>
 
         <div className="mt-16 text-center">
-          <Link to='/signup' className="px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-200">
+          <Link to='/signup' className="px-8 py-4 bg-gray-900 text-gray-900 font-bold rounded-2xl hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-200">
             Get Started Now
           </Link>
         </div>
