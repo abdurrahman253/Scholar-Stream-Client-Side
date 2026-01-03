@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Container from '../../components/Shared/Container';
-import Heading from '../../components/Shared/Heading';
 import Button from '../../components/Shared/Button/Button';
 import PurchaseModal from '../../components/Modal/PurchaseModal';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -14,15 +13,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin, Calendar, DollarSign, Award, Globe,
   Star, GraduationCap, Clock, CheckCircle2, User,
-  Send, AlertCircle, LogIn
+  AlertCircle, LogIn
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import toast from 'react-hot-toast'; // ← যোগ করা হয়েছে
 
 const ScholarshipDetails = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  const [reviewSuccess, setReviewSuccess] = useState(false); // Success message state
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -62,22 +61,35 @@ const ScholarshipDetails = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['reviews', id]);
-      setShowReviewForm(false);
       reset();
-      setReviewSuccess(true); // Show success message
-      setTimeout(() => setReviewSuccess(false), 5000); // Hide after 5 seconds
+      setShowReviewForm(false);
+      toast.success('🎉 Thank you! Your review has been submitted successfully!', {
+        duration: 5000,
+        position: 'top-center',
+        style: {
+          background: '#10b981',
+          color: 'white',
+          fontWeight: 'bold',
+        },
+        icon: '⭐',
+      });
     },
     onError: (error) => {
       console.error('Review submission failed:', error);
+      toast.error('Failed to submit review. Please try again.');
     },
   });
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const onSubmitReview = (data) => {
-    if (!user) return;
+    if (!user) {
+      toast.error('Please log in to write a review');
+      return;
+    }
     addReviewMutation.mutate({
       scholarshipId: id,
+      scholarshipName: scholarship.scholarshipName, // ← এটা পাঠানো হচ্ছে
       userName: user.displayName || 'Anonymous',
       userImage: user.photoURL || '',
       ratingPoint: parseInt(data.rating),
@@ -125,7 +137,7 @@ const ScholarshipDetails = () => {
 
   return (
     <div className="bg-[#FAFBFF] min-h-screen pb-20">
-      {/* Hero Section with Parallax-like Image */}
+      {/* Hero Section */}
       <div className="relative h-[500px] md:h-[600px] w-full overflow-hidden">
         <motion.img
           src={universityImage}
@@ -141,7 +153,7 @@ const ScholarshipDetails = () => {
       <Container>
         <div className="relative -mt-64 md:-mt-80 z-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column: Main Info */}
+            {/* Left Column */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-2 space-y-8">
               <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100">
                 <div className="flex flex-wrap gap-3 mb-6">
@@ -175,14 +187,15 @@ const ScholarshipDetails = () => {
                   </p>
                 </div>
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <PerkCard icon={<DollarSign color="#10b981"/>} title="Stipend" value={stipend > 0 ? `$${stipend.toLocaleString()}` : 'Full'} />
-                <PerkCard icon={<Calendar color="#ef4444"/>} title="Deadline" value={applicationDeadline ? format(new Date(applicationDeadline), 'MMM dd, yy') : 'Open'} />
+                <PerkCard icon={<DollarSign color="#10b981"/>} title="Stipend" value={stipend > 0 ? `$${stipend.toLocaleString()}` : 'Full Funded'} />
+                <PerkCard icon={<Calendar color="#ef4444"/>} title="Deadline" value={applicationDeadline ? format(new Date(applicationDeadline), 'MMM dd, yyyy') : 'Open'} />
                 <PerkCard icon={<Clock color="#6366f1"/>} title="Subject" value={subjectCategory} />
               </div>
             </motion.div>
 
-            {/* Right Column: Pricing & Action */}
+            {/* Right Column */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-1">
               <div className="sticky top-24 bg-white rounded-[2.5rem] p-8 shadow-xl border border-indigo-50">
                 <h4 className="text-xl font-bold text-gray-900 mb-8 text-center">Application Summary</h4>
@@ -202,7 +215,7 @@ const ScholarshipDetails = () => {
                   className="w-full py-5 rounded-2xl text-lg font-bold bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200 shadow-2xl transition-all"
                 />
                 <p className="text-center text-xs text-gray-400 mt-6">
-                  🔒 Secure Payment via Stripe/SSLCommerz
+                  🔒 Secure Payment via Stripe
                 </p>
               </div>
             </motion.div>
@@ -218,102 +231,117 @@ const ScholarshipDetails = () => {
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-black text-gray-900">Student Reviews</h2>
 
-              {/* Login Prompt or Write Review Button */}
+              {/* Write Review Button */}
               {!user ? (
-                <div className="text-center text-gray-500 bg-gray-50 px-6 py-4 rounded-2xl flex items-center gap-3">
+                <div className="text-gray-500 bg-gray-50 px-6 py-4 rounded-2xl flex items-center gap-3">
                   <LogIn size={20} />
                   <span>Please log in to write a review</span>
                 </div>
-              ) : !showReviewForm && (
+              ) : !showReviewForm ? (
                 <Button
                   label="Write a Review"
                   onClick={() => setShowReviewForm(true)}
-                  className="px-6 py-3 bg-indigo-100 text-indigo-600 hover:bg-indigo-200 font-medium"
+                  className="px-6 py-3 bg-indigo-100 text-indigo-600 hover:bg-indigo-200 font-medium rounded-xl"
                 />
-              )}
+              ) : null}
             </div>
 
-            {/* Success Message */}
-            <AnimatePresence>
-              {reviewSuccess && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mb-8 bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-2xl flex items-center gap-3"
-                >
-                  <CheckCircle2 size={24} />
-                  <span className="font-medium">Thank you! Your review has been submitted successfully.</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
             {/* Average Rating */}
-            <div className="flex items-center gap-6 mb-12 border-b border-gray-100 pb-8">
+            <div className="flex flex-col md:flex-row items-center gap-8 mb-12 border-b border-gray-100 pb-8">
               <div className="text-center">
-                <p className="text-5xl font-black text-gray-900">{averageRating.toFixed(1)}</p>
-                <p className="text-sm text-gray-500">out of 5</p>
+                <p className="text-6xl font-black text-gray-900">{averageRating.toFixed(1)}</p>
+                <p className="text-lg text-gray-500">out of 5</p>
+                <p className="text-sm text-gray-400 mt-1">{totalReviews} reviews</p>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex-1 max-w-md">
                 {[...Array(5)].reverse().map((_, i) => {
                   const ratingValue = 5 - i;
-                  const percentage = (reviews.filter(r => r.ratingPoint === ratingValue).length / totalReviews) * 100 || 0;
+                  const percentage = totalReviews > 0
+                    ? (reviews.filter(r => r.ratingPoint === ratingValue).length / totalReviews) * 100
+                    : 0;
                   return (
-                    <div key={i} className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">{ratingValue} ★</span>
-                      <div className="w-48 h-2 bg-gray-200 rounded-full">
-                        <div className="h-full bg-amber-400 rounded-full" style={{ width: `${percentage}%` }} />
+                    <div key={i} className="flex items-center gap-3 mb-2">
+                      <span className="text-sm text-gray-600 w-8">{ratingValue} ⭐</span>
+                      <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${percentage}%` }}
+                          transition={{ duration: 1, delay: i * 0.1 }}
+                          className="h-full bg-amber-400"
+                        />
                       </div>
-                      <span className="text-sm text-gray-500">{percentage.toFixed(0)}%</span>
+                      <span className="text-sm text-gray-500 w-12 text-right">{percentage.toFixed(0)}%</span>
                     </div>
                   );
                 })}
               </div>
-              <p className="text-gray-500">{totalReviews} {totalReviews === 1 ? 'review' : 'reviews'}</p>
             </div>
 
             {/* Review Form */}
             <AnimatePresence>
-              {showReviewForm && (
+              {showReviewForm && user && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mb-12 bg-gray-50 p-6 rounded-2xl"
+                  className="mb-12 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 md:p-8 rounded-3xl border border-indigo-100"
                 >
-                  <form onSubmit={handleSubmit(onSubmitReview)} className="space-y-4">
+                  {/* User Info */}
+                  <div className="flex items-center gap-4 mb-6 pb-6 border-b border-indigo-200">
+                    <img
+                      src={user.photoURL || '/default-avatar.png'}
+                      alt={user.displayName}
+                      className="w-14 h-14 rounded-full object-cover border-4 border-white shadow-lg"
+                    />
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                      <p className="font-bold text-gray-900">Writing as</p>
+                      <p className="text-lg font-semibold text-indigo-700">{user.displayName || 'Anonymous User'}</p>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit(onSubmitReview)} className="space-y-5">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Your Rating *</label>
                       <select
-                        {...register('rating', { required: true })}
-                        className="w-full p-3 border border-gray-200 rounded-xl focus:border-indigo-500"
+                        {...register('rating', { required: 'Rating is required' })}
+                        className="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all text-base"
                       >
-                        <option value="">Select rating</option>
-                        {[1,2,3,4,5].map(n => <option key={n} value={n}>{n} Stars</option>)}
+                        <option value="">Choose a rating</option>
+                        {[5,4,3,2,1].map(n => (
+                          <option key={n} value={n}>{n} Star{ n > 1 ? 's' : ''}</option>
+                        ))}
                       </select>
-                      {errors.rating && <p className="text-red-500 text-sm mt-1 flex items-center gap-1"><AlertCircle size={14}/> Required</p>}
+                      {errors.rating && <p className="text-red-500 text-sm mt-2 flex items-center gap-1"><AlertCircle size={16}/> {errors.rating.message}</p>}
                     </div>
+
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Your Review</label>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Your Review *</label>
                       <textarea
-                        {...register('comment', { required: true, minLength: 20 })}
-                        rows={4}
-                        className="w-full p-3 border border-gray-200 rounded-xl focus:border-indigo-500"
-                        placeholder="Share your experience..."
+                        {...register('comment', { 
+                          required: 'Review is required', 
+                          minLength: { value: 20, message: 'Minimum 20 characters required' }
+                        })}
+                        rows={5}
+                        className="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all resize-none text-base"
+                        placeholder="Share your honest experience about this scholarship..."
                       />
-                      {errors.comment && <p className="text-red-500 text-sm mt-1 flex items-center gap-1"><AlertCircle size={14}/> Minimum 20 characters</p>}
+                      {errors.comment && <p className="text-red-500 text-sm mt-2 flex items-center gap-1"><AlertCircle size={16}/> {errors.comment.message}</p>}
                     </div>
-                    <div className="flex gap-4">
+
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
                       <Button
                         type="submit"
-                        label={addReviewMutation.isLoading ? 'Submitting...' : 'Submit Review'}
-                        disabled={addReviewMutation.isLoading}
-                        className="flex-1"
+                        label={addReviewMutation.isPending ? 'Submitting...' : 'Submit Review'}
+                        disabled={addReviewMutation.isPending}
+                        className="flex-1 py-4 text-lg font-bold"
                       />
                       <Button
                         label="Cancel"
-                        onClick={() => setShowReviewForm(false)}
-                        className="bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        onClick={() => {
+                          setShowReviewForm(false);
+                          reset();
+                        }}
+                        className="flex-1 bg-gray-200 text-gray-700 hover:bg-gray-300 py-4 text-lg font-bold"
                       />
                     </div>
                   </form>
@@ -322,67 +350,60 @@ const ScholarshipDetails = () => {
             </AnimatePresence>
 
             {/* Reviews List */}
-            <div className="space-y-8">
+            <div className="space-y-10">
               {reviews.length > 0 ? (
                 reviews.map((review) => (
                   <motion.div
                     key={review._id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="border-b border-gray-100 pb-8 last:border-b-0 last:pb-0"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-gradient-to-br from-gray-50 to-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-md hover:shadow-xl transition-all"
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex flex-col md:flex-row gap-6">
                       <div className="flex-shrink-0">
-                        {review.userImage ? (
-                          <img
-                            src={review.userImage}
-                            alt={review.userName}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-100 shadow-sm"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
-                            <User size={24} className="text-indigo-600" />
-                          </div>
-                        )}
+                        <img
+                          src={review.userImage || '/default-avatar.png'}
+                          alt={review.userName}
+                          className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg"
+                        />
                       </div>
                       <div className="flex-1">
-                        <div className="flex justify-between items-start mb-2">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-4">
                           <div>
-                            <h4 className="font-bold text-gray-900 text-lg">{review.userName}</h4>
+                            <h4 className="text-xl font-bold text-gray-900">{review.userName || 'Anonymous'}</h4>
                             <p className="text-sm text-gray-500">
                               {format(new Date(review.reviewDate), 'MMMM dd, yyyy')}
                             </p>
+                            {/* Fallback for scholarship name */}
+                            <p className="text-xs text-indigo-600 mt-1 italic">
+                              Reviewed: {review.scholarshipName || scholarship.scholarshipName || 'Unknown Scholarship'}
+                            </p>
                           </div>
-                          <div className="flex gap-0.5 text-amber-400">
+                          <div className="flex gap-1">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                size={16}
-                                fill={i < review.ratingPoint ? "currentColor" : "none"}
-                                strokeWidth={2}
+                                size={20}
+                                className={i < review.ratingPoint ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}
                               />
                             ))}
                           </div>
                         </div>
-                        <p className="text-gray-700 leading-relaxed mt-2">{review.reviewComment}</p>
-                        {review.universityName && (
-                          <p className="text-xs text-gray-400 mt-2 italic">
-                            Reviewed for {review.universityName}
-                          </p>
-                        )}
+                        <p className="text-gray-700 text-base leading-relaxed">
+                          {review.reviewComment}
+                        </p>
                       </div>
                     </div>
                   </motion.div>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star size={32} className="text-gray-400" />
+                <div className="text-center py-16">
+                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Star size={40} className="text-gray-400" />
                   </div>
-                  <p className="text-gray-500 text-lg">No reviews yet</p>
-                  <p className="text-gray-400 text-sm mt-2">
-                    Be the first to share your experience!
-                  </p>
+                  <p className="text-2xl font-bold text-gray-700 mb-2">No reviews yet</p>
+                  <p className="text-gray-500">Be the first to share your experience!</p>
                 </div>
               )}
             </div>
@@ -401,19 +422,19 @@ const ScholarshipDetails = () => {
 };
 
 const PerkCard = ({ icon, title, value }) => (
-  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-    <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center mb-4">
+  <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all">
+    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center mb-5">
       {icon}
     </div>
-    <p className="text-sm text-gray-500 font-medium">{title}</p>
-    <p className="text-xl font-bold text-gray-900">{value}</p>
+    <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">{title}</p>
+    <p className="text-2xl font-black text-gray-900 mt-2">{value}</p>
   </div>
 );
 
 const PriceRow = ({ label, value }) => (
-  <div className="flex justify-between text-gray-600 font-medium text-lg">
+  <div className="flex justify-between text-gray-700 font-medium text-lg py-3 border-b border-gray-100 last:border-0">
     <span>{label}</span>
-    <span className="text-gray-900 font-bold">{value}</span>
+    <span className="font-bold text-gray-900">{value}</span>
   </div>
 );
 

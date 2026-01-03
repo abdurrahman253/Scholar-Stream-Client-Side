@@ -1,51 +1,63 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router'
-import axios from 'axios'
-import useAuth from './useAuth'
+// src/hooks/useAxiosSecure.js
 
-const axiosInstance = axios.create({
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAuth from './useAuth';
+
+const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
-})
+});
 
 const useAxiosSecure = () => {
-  const { user, logOut, loading } = useAuth()
-  const navigate = useNavigate()
+  const { logOut, user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && user?.accessToken) {
-      // Add request interceptor
-      const requestInterceptor = axiosInstance.interceptors.request.use(
-        config => {
-          config.headers.Authorization = `Bearer ${user.accessToken}`
-          return config
-        }
-      )
-
-      // Add response interceptor
-      const responseInterceptor = axiosInstance.interceptors.response.use(
-        res => res,
-        err => {
-          if (err?.response?.status === 401 || err?.response?.status === 403) {
-            logOut()
-              .then(() => {
-                console.log('Logged out successfully.')
-              })
-              .catch(console.error)
-            navigate('/login')
+    // Request Interceptor - Fresh token পাঠানো
+    const requestIntercept = axiosSecure.interceptors.request.use(
+      async (config) => {
+        if (user) {
+          try {
+            // 🔥 Force refresh token to get fresh one
+            const token = await user.getIdToken(true); // true = force refresh
+            config.headers.Authorization = `Bearer ${token}`;
+          } catch (error) {
+            console.error('Error getting fresh token:', error);
           }
-          return Promise.reject(err)
         }
-      )
-
-      // Cleanup to prevent multiple interceptors on re-renders
-      return () => {
-        axiosInstance.interceptors.request.eject(requestInterceptor)
-        axiosInstance.interceptors.response.eject(responseInterceptor)
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
       }
-    }
-  }, [user, loading, logOut, navigate])
+    );
 
-  return axiosInstance
-}
-export default useAxiosSecure
+    // Response Interceptor - 401/403 handle করা
+    const responseIntercept = axiosSecure.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const status = error.response?.status;
+
+        // If token expired or unauthorized
+        if (status === 401 || status === 403) {
+          console.error('Token expired or unauthorized. Logging out...');
+          await logOut();
+          navigate('/login');
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup interceptors
+    return () => {
+      axiosSecure.interceptors.request.eject(requestIntercept);
+      axiosSecure.interceptors.response.eject(responseIntercept);
+    };
+  }, [user, logOut, navigate]);
+
+  return axiosSecure;
+};
+
+export default useAxiosSecure;
