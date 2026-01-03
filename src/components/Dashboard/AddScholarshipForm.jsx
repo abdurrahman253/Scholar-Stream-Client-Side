@@ -2,88 +2,265 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../hooks/useAuth'; // 👈 Add this
+import { TbFidgetSpinner } from 'react-icons/tb';
 
+// Validation Schema
 const schema = z.object({
   name: z.string().min(1, 'Scholarship name is required'),
   university: z.string().min(1, 'University name is required'),
   image: z.any().optional(),
   country: z.string().min(1, 'Country is required'),
   city: z.string().min(1, 'City is required'),
-  worldRank: z.coerce.number().min(1, 'World rank must be a valid number'),
-  subjectCategory: z.string().min(1, 'Subject category is required'),
-  scholarshipCategory: z.string().min(1, 'Scholarship category is required'),
-  degree: z.string().min(1, 'Degree is required'),
+  worldRank: z.coerce.number().min(1, 'Rank must be a valid number'),
+  subjectCategory: z.string().min(1, 'Required'),
+  scholarshipCategory: z.string().optional(),
+  degree: z.string().min(1, 'Required'),
   tuitionFees: z.coerce.number().optional(),
-  applicationFees: z.coerce.number().min(0, 'Application fees must be >= 0'),
-  serviceCharge: z.coerce.number().min(0, 'Service charge must be >= 0'),
+  applicationFees: z.coerce.number().min(0, 'Min 0'),
+  serviceCharge: z.coerce.number().min(0, 'Min 0'),
   deadline: z.string().min(1, 'Deadline is required'),
-  postDate: z.string().min(1, 'Post date is required'),
-  userEmail: z.string().email('Invalid email format'),
 });
 
 const AddScholarshipForm = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
+  const queryClient = useQueryClient();
+  const axiosSecure = useAxiosSecure();
+  const { user } = useAuth(); // 👈 Get user
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data) => {
-    try {
-      const formData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        if (key === 'image' && value[0]) formData.append(key, value[0]);
-        else formData.append(key, value || '');
+  // TanStack Mutation
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (formData) => {
+      const { data } = await axiosSecure.post('/scholarships', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // 👈 Important!
+        }
       });
-      const response = await fetch('/scholarships', { method: 'POST', body: formData });
-      if (response.ok) {
-        toast.success('Scholarship added successfully! 🎉');
-        reset();
-      } else {
-        toast.error('Failed to add scholarship.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('Something went wrong!');
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Scholarship added successfully! 🎉');
+      queryClient.invalidateQueries(['scholarships']);
+      reset();
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Something went wrong!');
+      console.error('Mutation error:', error);
+    }
+  });
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    
+    // Image file
+    if (data.image && data.image[0]) {
+      formData.append('image', data.image[0]);
+    }
+
+    // All other fields
+    formData.append('name', data.name);
+    formData.append('university', data.university);
+    formData.append('country', data.country);
+    formData.append('city', data.city);
+    formData.append('worldRank', data.worldRank);
+    formData.append('subjectCategory', data.subjectCategory);
+    formData.append('scholarshipCategory', data.scholarshipCategory || 'General');
+    formData.append('degree', data.degree);
+    formData.append('tuitionFees', data.tuitionFees || 0);
+    formData.append('applicationFees', data.applicationFees);
+    formData.append('serviceCharge', data.serviceCharge);
+    formData.append('deadline', data.deadline);
+    formData.append('postDate', new Date().toISOString().split('T')[0]);
+    formData.append('userEmail', user?.email || ''); // 👈 Add user email
+
+    // Debug: Check formData
+    console.log('📦 FormData entries:');
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    try {
+      await mutateAsync(formData);
+    } catch (err) {
+      console.log('Submission failed:', err);
     }
   };
 
+  const labelStyle = "block text-[11px] uppercase tracking-widest font-black text-slate-500 mb-2 ml-1";
+  const inputStyle = "w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 sm:text-sm";
+  const errorStyle = "text-red-500 text-xs mt-1 ml-1 font-bold";
+
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-2xl shadow-2xl border border-gray-700 max-w-2xl mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
-          Add New Scholarship
-        </h1>
-        <p className="text-gray-400">Fill all details to create a new scholarship opportunity</p>
+    <div className="max-w-4xl mx-auto py-5">
+      <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white p-6 md:p-12">
+        <header className="mb-10 text-center md:text-left">
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Post New Scholarship</h1>
+          <p className="text-slate-500 mt-2 font-medium">Add details for the global student community.</p>
+        </header>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          {/* Basic Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="md:col-span-2">
+              <label className={labelStyle}>Scholarship Name *</label>
+              <input 
+                {...register('name')} 
+                className={inputStyle} 
+                placeholder="e.g. Commonwealth Scholarship" 
+              />
+              {errors.name && <p className={errorStyle}>{errors.name.message}</p>}
+            </div>
+
+            <div>
+              <label className={labelStyle}>University Name *</label>
+              <input 
+                {...register('university')} 
+                className={inputStyle} 
+                placeholder="Harvard University" 
+              />
+              {errors.university && <p className={errorStyle}>{errors.university.message}</p>}
+            </div>
+
+            <div>
+              <label className={labelStyle}>Subject Category *</label>
+              <select {...register('subjectCategory')} className={inputStyle}>
+                <option value="">Select Category</option>
+                <option value="Agriculture">Agriculture</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Business">Business</option>
+                <option value="Science">Science</option>
+                <option value="Arts">Arts</option>
+              </select>
+              {errors.subjectCategory && <p className={errorStyle}>{errors.subjectCategory.message}</p>}
+            </div>
+          </div>
+
+          {/* Location & Rank */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+              <label className={labelStyle}>Country *</label>
+              <input {...register('country')} className={inputStyle} placeholder="USA" />
+              {errors.country && <p className={errorStyle}>{errors.country.message}</p>}
+            </div>
+            <div>
+              <label className={labelStyle}>City *</label>
+              <input {...register('city')} className={inputStyle} placeholder="Boston" />
+              {errors.city && <p className={errorStyle}>{errors.city.message}</p>}
+            </div>
+            <div>
+              <label className={labelStyle}>World Rank *</label>
+              <input type="number" {...register('worldRank')} className={inputStyle} placeholder="1" />
+              {errors.worldRank && <p className={errorStyle}>{errors.worldRank.message}</p>}
+            </div>
+          </div>
+
+          {/* Degree & Category */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className={labelStyle}>Degree *</label>
+              <select {...register('degree')} className={inputStyle}>
+                <option value="">Select Degree</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Bachelor">Bachelor</option>
+                <option value="Masters">Masters</option>
+                <option value="PhD">PhD</option>
+              </select>
+              {errors.degree && <p className={errorStyle}>{errors.degree.message}</p>}
+            </div>
+
+            <div>
+              <label className={labelStyle}>Scholarship Category</label>
+              <select {...register('scholarshipCategory')} className={inputStyle}>
+                <option value="Full fund">Full Fund</option>
+                <option value="Partial">Partial</option>
+                <option value="Self-fund">Self Fund</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Fees & Dates */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+            <div>
+              <label className={labelStyle}>Tuition Fee</label>
+              <input 
+                type="number" 
+                {...register('tuitionFees')} 
+                className={inputStyle} 
+                placeholder="0" 
+              />
+            </div>
+            <div>
+              <label className={labelStyle}>App Fee *</label>
+              <input 
+                type="number" 
+                {...register('applicationFees')} 
+                className={inputStyle} 
+                placeholder="50" 
+              />
+              {errors.applicationFees && <p className={errorStyle}>{errors.applicationFees.message}</p>}
+            </div>
+            <div>
+              <label className={labelStyle}>Service Charge *</label>
+              <input 
+                type="number" 
+                {...register('serviceCharge')} 
+                className={inputStyle} 
+                placeholder="10" 
+              />
+              {errors.serviceCharge && <p className={errorStyle}>{errors.serviceCharge.message}</p>}
+            </div>
+            <div>
+              <label className={labelStyle}>Deadline *</label>
+              <input 
+                type="date" 
+                {...register('deadline')} 
+                className={inputStyle} 
+              />
+              {errors.deadline && <p className={errorStyle}>{errors.deadline.message}</p>}
+            </div>
+          </div>
+
+          {/* Image Upload */}
+          <div className="relative group border-2 border-dashed border-slate-200 rounded-[2rem] p-8 text-center hover:border-purple-400 transition-colors">
+            <input 
+              type="file" 
+              accept="image/*"
+              {...register('image')} 
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+            />
+            <div className="space-y-2">
+              <div className="mx-auto w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                </svg>
+              </div>
+              <p className="text-sm font-bold text-slate-700">Upload University Logo</p>
+              <p className="text-xs text-slate-500">PNG, JPG, WEBP (Max 5MB)</p>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full bg-slate-900 text-white font-black py-5 rounded-2xl shadow-2xl hover:bg-purple-600 transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-3"
+          >
+            {isPending ? (
+              <>
+                <TbFidgetSpinner className="animate-spin text-xl" />
+                Adding Scholarship...
+              </>
+            ) : (
+              "Publish Scholarship"
+            )}
+          </button>
+        </form>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Scholarship Name *</label>
-            <input {...register('name')} className="w-full p-4 bg-purple-50/50 border border-gray-600 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300" placeholder="e.g., Fulbright Scholarship" />
-            {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>}
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">University Name *</label>
-            <input {...register('university')} className="w-full p-4 bg-purple-50/50 border border-gray-600 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300" placeholder="e.g., Harvard University" />
-            {errors.university && <p className="text-red-400 text-sm mt-1">{errors.university.message}</p>}
-          </div>
-        </div>
-        {/* ... (rest of the form fields are the same, but with modern Tailwind consistency) */}
-        <button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2 group">
-          {isSubmitting ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Adding Scholarship...</span>
-            </>
-          ) : (
-            <>
-              <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span>Add Scholarship</span>
-            </>
-          )}
-        </button>
-      </form>
     </div>
   );
 };

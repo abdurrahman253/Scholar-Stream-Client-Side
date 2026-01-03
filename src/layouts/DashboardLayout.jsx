@@ -23,11 +23,30 @@ import MyApplicationsTable from '../components/Dashboard/MyApplicationsTable';
 import MyReviewsTable from '../components/Dashboard/MyReviewsTable';
 import useRole from '../hooks/useRole';
 import { NavLink } from 'react-router';
+import useAuth from '../hooks/useAuth'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const DashboardLayout = () => {
   const { role, loading } = useRole();
+  const { logOut } = useAuth(); 
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('profile');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+
+
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+      navigate('/'); 
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
+
+
 
   if (loading) {
     return (
@@ -121,11 +140,12 @@ const DashboardLayout = () => {
 
           {/* Sidebar Footer */}
           <div className="p-6 border-t border-slate-100">
-            <NavLink 
-            to='/' className="flex items-center gap-4 w-full px-5 py-3 text-red-500 font-bold text-sm hover:bg-red-50 rounded-2xl transition-all">
+            <button
+            onClick={handleSignOut}
+             className="flex items-center gap-4 w-full px-5 py-3 text-red-500 font-bold text-sm hover:bg-red-50 rounded-2xl transition-all">
               <ArrowLeftOnRectangleIcon className="h-5 w-5" />
               Sign Out
-            </NavLink>
+            </button>
           </div>
         </div>
       </aside>
