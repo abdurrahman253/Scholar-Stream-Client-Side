@@ -195,14 +195,14 @@ const ManageScholarships = () => {
                     </td>
                     <td className="px-4 xl:px-6 py-3 xl:py-4">
                       <div className="font-semibold text-gray-900 text-sm xl:text-base">{s.universityName}</div>
-                      <div className="text-xs xl:text-sm text-gray-500">Rank #{s.worldRank}</div>
+                      <div className="text-xs xl:text-sm text-gray-500">Rank #{s.universityWorldRank}</div>
                     </td>
                     <td className="px-4 xl:px-6 py-3 xl:py-4">
                       <div className="text-gray-900 text-sm xl:text-base">{s.universityCity}</div>
                       <div className="text-xs xl:text-sm text-gray-500">{s.universityCountry}</div>
                     </td>
                     <td className="px-4 xl:px-6 py-3 xl:py-4">
-                      <div className="font-bold text-purple-600 text-sm xl:text-base">${s.applicationFees + s.serviceCharge}</div>
+                      <div className="font-bold text-purple-600 text-sm xl:text-base">${(Number(s.applicationFees) + Number(s.serviceCharge)).toFixed(2)}</div>
                       <div className="text-xs text-gray-500">Total Fee</div>
                     </td>
                     <td className="px-4 xl:px-6 py-3 xl:py-4">
@@ -262,7 +262,7 @@ const ManageScholarships = () => {
                 </div>
                 <div>
                   <p className="text-gray-500 font-semibold mb-0.5 sm:mb-1">World Rank</p>
-                  <p className="text-gray-900 font-bold text-xs sm:text-sm">#{s.worldRank}</p>
+                  <p className="text-gray-900 font-bold text-xs sm:text-sm">#{s.universityWorldRank}</p>
                 </div>
                 <div>
                   <p className="text-gray-500 font-semibold mb-0.5 sm:mb-1">Degree</p>
@@ -270,7 +270,7 @@ const ManageScholarships = () => {
                 </div>
                 <div>
                   <p className="text-gray-500 font-semibold mb-0.5 sm:mb-1">Total Fee</p>
-                  <p className="text-purple-600 font-bold text-xs sm:text-sm">${s.applicationFees + s.serviceCharge}</p>
+                  <p className="text-purple-600 font-bold text-xs sm:text-sm">${(Number(s.applicationFees) + Number(s.serviceCharge)).toFixed(2)}</p>
                 </div>
               </div>
 
@@ -414,7 +414,7 @@ const ManageScholarships = () => {
       <input
         name="worldRank"
         type="number"
-        defaultValue={selected.worldRank}
+        defaultValue={selected.universityWorldRank}
         required
         className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all outline-none"
       />

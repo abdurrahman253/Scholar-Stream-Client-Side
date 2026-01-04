@@ -43,11 +43,16 @@ const ManageUsersTable = () => {
     student: { icon: <FaUserGraduate />, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' }
   };
 
-  if (isLoading) return (
-    <div className="flex h-screen items-center justify-center bg-white">
-      <TbFidgetSpinner className="w-8 h-8 animate-spin text-indigo-600" />
-    </div>
-  );
+   if (isLoading) {
+     return (
+       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+         <div className="text-center">
+           <TbFidgetSpinner className="w-16 h-16 animate-spin text-purple-600 mx-auto" />
+           <p className="mt-4 text-gray-600 font-semibold">Loading Users...</p>
+         </div>
+       </div>
+     );
+   }
 
   return (
     <div className="min-h-screen bg-slate-50/50 pb-10">

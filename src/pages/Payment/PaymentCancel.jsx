@@ -27,14 +27,14 @@ const PaymentCancel = () => {
 
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3">
+                   <button
+                  onClick={() => navigate('/dashboard', { state: { section: 'my-applications' } })}
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition font-semibold shadow-lg"
+                   >
+                   Go to Dashboard & Retry
+                 </button>
                     <button
-                        onClick={() => navigate('/my-applications')}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
-                    >
-                        Go to Dashboard & Retry
-                    </button>
-                    <button
-                        onClick={() => navigate('/scholarships')}
+                        onClick={() => navigate('/all-scholarships')}
                         className="w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition font-semibold"
                     >
                         Browse Scholarships

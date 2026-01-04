@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../components/Shared/Container';
 import Button from '../../components/Shared/Button/Button';
-import PurchaseModal from '../../components/Modal/PurchaseModal';
+import PurchaseModal from '../../components/Shared/Modal/PurchaseModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';

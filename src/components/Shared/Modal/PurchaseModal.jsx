@@ -2,8 +2,8 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { X, CheckCircle2, CreditCard, Shield, Calendar, DollarSign, Award, GraduationCap } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
-import useAuth from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
+import useAuth from '../../../hooks/useAuth'
 
 const PurchaseModal = ({ closeModal, isOpen, scholarship, totalCost }) => {
   const { user } = useAuth()

@@ -1,3 +1,4 @@
+import { TbFidgetSpinner } from 'react-icons/tb';
 import useAuth from '../../hooks/useAuth';
 import useRole from '../../hooks/useRole';
 import { toast } from 'react-hot-toast';
@@ -6,11 +7,16 @@ const ProfileComponent = () => {
   const { user } = useAuth();
   const { role, loading: roleLoading } = useRole();
 
-  if (roleLoading) return (
-    <div className="flex h-64 items-center justify-center">
-      <div className="w-10 h-10 border-4 border-purple-600/20 border-t-purple-600 rounded-full animate-spin"></div>
-    </div>
-  );
+  if (roleLoading) {
+        return (
+          <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+            <div className="text-center">
+              <TbFidgetSpinner className="w-16 h-16 animate-spin text-purple-600 mx-auto" />
+              <p className="mt-4 text-gray-600 font-semibold">Loading Profile...</p>
+            </div>
+          </div>
+        );
+      }
 
   return (
     <div className="w-full max-w-4xl mx-auto px-2 md:px-0">

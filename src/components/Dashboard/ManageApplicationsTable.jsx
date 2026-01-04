@@ -75,16 +75,16 @@ const ManageApplicationsTable = () => {
     setIsFeedbackOpen(true);
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
-        <div className="text-center">
-          <TbFidgetSpinner className="w-16 h-16 animate-spin text-purple-600 mx-auto" />
-          <p className="mt-4 text-gray-600 font-semibold">Loading applications...</p>
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+          <div className="text-center">
+            <TbFidgetSpinner className="w-16 h-16 animate-spin text-purple-600 mx-auto" />
+            <p className="mt-4 text-gray-600 font-semibold">Loading Applications...</p>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
   if (error) {
     return (
