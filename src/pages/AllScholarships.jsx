@@ -1,204 +1,201 @@
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import { FaSearch, FaFilter, FaTimes } from 'react-icons/fa'
-import Container from '../components/Shared/Container'
-import ScholarshipCard from '../components/Home/ScholarshipCard'
-import LoadingSpinner from '../components/Shared/LoadingSpinner'
-import { useEffect } from 'react'
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { FaSearch, FaChevronLeft, FaChevronRight, FaGraduationCap } from 'react-icons/fa';
+import Container from '../components/Shared/Container';
+import ScholarshipCard from '../components/Home/ScholarshipCard';
+
+/**
+ * Modern Skeleton Card Component
+ * ডাটা লোড হওয়ার সময় এই সুন্দর কাঠামোটি দেখাবে
+ */
+const ScholarshipSkeleton = () => (
+  <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-pulse">
+    <div className="w-full h-44 bg-slate-200 rounded-2xl mb-4"></div>
+    <div className="h-6 bg-slate-200 rounded-lg w-3/4 mb-3"></div>
+    <div className="h-4 bg-slate-200 rounded-lg w-1/2 mb-6"></div>
+    <div className="space-y-3">
+      <div className="flex justify-between">
+        <div className="h-4 bg-slate-100 rounded-lg w-1/4"></div>
+        <div className="h-4 bg-slate-100 rounded-lg w-1/4"></div>
+      </div>
+      <div className="h-12 bg-indigo-50 rounded-xl w-full mt-4"></div>
+    </div>
+  </div>
+);
 
 const AllScholarships = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [selectedSubject, setSelectedSubject] = useState('All')
-  const [selectedCountry, setSelectedCountry] = useState('All')
-  const [showFilters, setShowFilters] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState('');
+  const [sortBy, setSortBy] = useState('postDate');
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [page, setPage] = useState(1);
+  const limit = 8; // Per page limit
 
-   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
 
-  const { data: scholarships = [], isLoading } = useQuery({
-    queryKey: ['all-scholarships'],
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ['scholarships', searchTerm, category, sortBy, sortOrder, page],
     queryFn: async () => {
-      const result = await axios.get(`${import.meta.env.VITE_API_URL}/scholarships`)
-      return result.data
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/scholarships`, {
+        params: { search: searchTerm, category, sortBy, sortOrder, page, limit }
+      });
+      return data;
     },
-  })
+    keepPreviousData: true,
+  });
 
-  if (isLoading) return <LoadingSpinner />
+  const scholarships = data?.scholarships || [];
+  const totalPages = data?.totalPages || 1;
 
-  // Extract unique values for filters
-  const categories = ['All', ...new Set(scholarships.map(s => s.scholarshipCategory))]
-  const subjects = ['All', ...new Set(scholarships.map(s => s.subjectCategory))]
-  const countries = ['All', ...new Set(scholarships.map(s => s.universityCountry))]
-
-  // Filter scholarships
-  const filteredScholarships = scholarships.filter(scholarship => {
-    const matchesSearch = 
-      scholarship.scholarshipName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      scholarship.universityName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      scholarship.degree?.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchesCategory = selectedCategory === 'All' || scholarship.scholarshipCategory === selectedCategory
-    const matchesSubject = selectedSubject === 'All' || scholarship.subjectCategory === selectedSubject
-    const matchesCountry = selectedCountry === 'All' || scholarship.universityCountry === selectedCountry
-
-    return matchesSearch && matchesCategory && matchesSubject && matchesCountry
-  })
-
-  // Reset filters
-  const resetFilters = () => {
-    setSearchTerm('')
-    setSelectedCategory('All')
-    setSelectedSubject('All')
-    setSelectedCountry('All')
-  }
-
-  const activeFiltersCount = [selectedCategory, selectedSubject, selectedCountry].filter(f => f !== 'All').length + (searchTerm ? 1 : 0)
+  const handleReset = () => {
+    setSearchTerm('');
+    setCategory('');
+    setSortBy('postDate');
+    setSortOrder('desc');
+    setPage(1);
+  };
 
   return (
-    <>
-      {/* Add top padding to push content below fixed navbar */}
-      <div className='py-20 md:py-24 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50'>
-        <Container>
-          {/* Header */}
-          <div className='text-center mb-12'>
-            <h1 className='text-4xl md:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 drop-shadow-lg'>
-              Explore Scholarships
-            </h1>
-            <p className='text-gray-700 text-lg md:text-xl max-w-3xl mx-auto'>
-              Discover <span className='font-bold text-indigo-600'>{scholarships.length}+</span> premium scholarship opportunities from top universities worldwide
-            </p>
+    <div className='py-20 md:py-28 min-h-screen bg-[#F8FAFC]'>
+      <Container>
+        {/* Header Section */}
+        <div className='text-center mb-12'>
+          <div className='inline-flex items-center justify-center p-3 bg-indigo-100 rounded-2xl mb-4 text-indigo-600'>
+            <FaGraduationCap size={28} />
           </div>
+          <h1 className='text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight'>
+            Explore <span className='text-indigo-600'>Scholarships</span>
+          </h1>
+          <p className='text-slate-500 max-w-xl mx-auto text-sm md:text-base'>
+            Your dream education is one click away. Filter through hundreds of opportunities.
+          </p>
+        </div>
 
+        {/* Controls Section */}
+        <div className='flex flex-col gap-6 mb-12'>
           {/* Search Bar */}
-          <div className='mb-10'>
-            <div className='relative max-w-4xl mx-auto'>
-              <FaSearch className='absolute left-6 top-1/2 -translate-y-1/2 text-indigo-500 w-6 h-6' />
-              <input
-                type='text'
-                placeholder='Search by name, university, degree...'
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className='w-full pl-16 pr-12 py-5 rounded-3xl bg-white/90 backdrop-blur-md shadow-xl text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-300 text-lg'
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600 transition-colors'
-                >
-                  <FaTimes className='w-5 h-5' />
-                </button>
-              )}
-            </div>
+          <div className='relative w-full max-w-2xl mx-auto'>
+            <FaSearch className='absolute left-5 top-1/2 -translate-y-1/2 text-slate-400' />
+            <input
+              type='text'
+              placeholder='Search by name, university or degree...'
+              value={searchTerm}
+              onChange={(e) => {setSearchTerm(e.target.value); setPage(1);}}
+              className='w-full pl-12 pr-4 py-4 rounded-2xl bg-white shadow-sm border border-slate-200 focus:ring-4 focus:ring-indigo-50 outline-none transition-all placeholder:text-slate-400'
+            />
           </div>
 
-          {/* Mobile Filter Toggle & Results */}
-          <div className='mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className='md:hidden inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-900 font-semibold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg'
+          {/* Filters & Sorting */}
+          <div className='flex flex-wrap items-center justify-center gap-4'>
+            <select 
+              value={category} 
+              onChange={(e) => {setCategory(e.target.value); setPage(1);}}
+              className='px-5 py-3 rounded-2xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors cursor-pointer shadow-sm'
             >
-              <FaFilter className='w-5 h-5' />
-              <span>Filters</span>
-              {activeFiltersCount > 0 && (
-                <span className='px-3 py-1 bg-white/20 text-gray-900 text-sm font-bold rounded-full'>
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
+              <option value="">All Categories</option>
+              <option value="Full Fund">Full Fund</option>
+              <option value="Partial Fund">Partial Fund</option>
+              <option value="Self Fund">Self Fund</option>
+            </select>
 
-            <div className='flex items-center justify-between sm:justify-end gap-6'>
-              <p className='text-gray-700 font-medium'>
-                Showing <span className='font-bold text-indigo-600 text-xl'>{filteredScholarships.length}</span> scholarships
-              </p>
-              {(activeFiltersCount > 0 || searchTerm) && (
-                <button
-                  onClick={resetFilters}
-                  className='text-indigo-600 hover:text-indigo-800 font-semibold underline-offset-4 hover:underline transition-all'
-                >
-                  Clear All
-                </button>
-              )}
-            </div>
-          </div>
+            <select 
+              value={`${sortBy}-${sortOrder}`} 
+              onChange={(e) => {
+                const [field, order] = e.target.value.split('-');
+                setSortBy(field);
+                setSortOrder(order);
+                setPage(1);
+              }}
+              className='px-5 py-3 rounded-2xl bg-white border border-slate-200 text-sm font-semibold text-slate-700 outline-none focus:border-indigo-500 transition-colors cursor-pointer shadow-sm'
+            >
+              <option value="postDate-desc">Recently Posted</option>
+              <option value="applicationFees-asc">Fees: Low to High</option>
+              <option value="applicationFees-desc">Fees: High to Low</option>
+            </select>
 
-          {/* Filters Section */}
-          <div className={`${showFilters ? 'block' : 'hidden'} md:block mb-12`}>
-            <div className='bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/50'>
-              <h3 className='text-xl font-bold text-gray-800 mb-6'>Refine Your Search</h3>
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-                <div>
-                  <label className='block text-sm font-semibold text-gray-700 mb-3'>Scholarship Category</label>
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className='w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 bg-white/70 transition-all duration-300 text-gray-800'
-                  >
-                    {categories.map(category => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className='block text-sm font-semibold text-gray-700 mb-3'>Subject Category</label>
-                  <select
-                    value={selectedSubject}
-                    onChange={(e) => setSelectedSubject(e.target.value)}
-                    className='w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 bg-white/70 transition-all duration-300 text-gray-800'
-                  >
-                    {subjects.map(subject => (
-                      <option key={subject} value={subject}>{subject}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className='block text-sm font-semibold text-gray-700 mb-3'>Country</label>
-                  <select
-                    value={selectedCountry}
-                    onChange={(e) => setSelectedCountry(e.target.value)}
-                    className='w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 bg-white/70 transition-all duration-300 text-gray-800'
-                  >
-                    {countries.map(country => (
-                      <option key={country} value={country}>{country}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Scholarships Grid */}
-          {filteredScholarships.length === 0 ? (
-            <div className='text-center py-32 bg-white/70 backdrop-blur-md rounded-3xl shadow-2xl'>
-              <div className='mb-8'>
-                <div className='inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full'>
-                  <FaSearch className='w-16 h-16 text-indigo-500' />
-                </div>
-              </div>
-              <h3 className='text-3xl font-bold text-gray-800 mb-4'>No scholarships found</h3>
-              <p className='text-gray-600 text-lg mb-10 max-w-md mx-auto'>Try adjusting your search term or filters to see more results</p>
-              <button
-                onClick={resetFilters}
-                className='px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-900 font-bold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-xl'
+            {(searchTerm || category) && (
+              <button 
+                onClick={handleReset} 
+                className='px-4 py-2 text-sm font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-all'
               >
-                Clear Filters & Search Again
+                Reset Filters
               </button>
+            )}
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className={`transition-all duration-300 ${isFetching && !isLoading ? 'opacity-40 grayscale-[0.5]' : 'opacity-100'}`}>
+          {isLoading ? (
+            /* Loading State with Skeletons */
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+              {[...Array(limit)].map((_, i) => (
+                <ScholarshipSkeleton key={i} />
+              ))}
+            </div>
+          ) : scholarships.length === 0 ? (
+            /* Empty State */
+            <div className='text-center py-24 bg-white rounded-[40px] border border-slate-100 shadow-sm'>
+              <div className='bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                 <FaSearch className='text-slate-300 text-3xl' />
+              </div>
+              <h3 className='text-xl font-bold text-slate-800'>No Results Found</h3>
+              <p className='text-slate-500'>Try adjusting your search or filters to find what you're looking for.</p>
             </div>
           ) : (
-            <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-8'>
-              {filteredScholarships.map((scholarship) => (
-                <ScholarshipCard key={scholarship._id} scholarship={scholarship} />
+            /* Data Grid */
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+              {scholarships.map((s) => (
+                <ScholarshipCard key={s._id} scholarship={s} />
               ))}
             </div>
           )}
-        </Container>
-      </div>
-    </>
-  )
-}
+        </div>
 
-export default AllScholarships
+        {/* Modern Pagination */}
+        {totalPages > 1 && (
+          <div className='mt-20 flex items-center justify-center gap-3'>
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className='w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-200 text-slate-600 disabled:opacity-20 hover:border-indigo-500 hover:text-indigo-600 transition-all shadow-sm'
+            >
+              <FaChevronLeft size={14} />
+            </button>
+            
+            <div className='flex items-center gap-2'>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setPage(i + 1)}
+                  className={`w-12 h-12 rounded-2xl font-bold transition-all border ${
+                    page === i + 1 
+                    ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100 scale-110' 
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-indigo-300'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className='w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-slate-200 text-slate-600 disabled:opacity-20 hover:border-indigo-500 hover:text-indigo-600 transition-all shadow-sm'
+            >
+              <FaChevronRight size={14} />
+            </button>
+          </div>
+        )}
+      </Container>
+    </div>
+  );
+};
+
+export default AllScholarships;
