@@ -31,6 +31,7 @@ import useAuth from '../hooks/useAuth';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { TbFidgetSpinner } from 'react-icons/tb';
 import toast from 'react-hot-toast';
+import FloatingContactWidget from '../components/FloatingContactWidget/FloatingContactWidget';
 
 const DashboardLayout = () => {
   const location = useLocation(); // ← For reading navigation state
@@ -236,6 +237,8 @@ const handleSignOut = async () => {
         </main>
       </div>
 
+       <FloatingContactWidget />
+
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 5px;
@@ -252,6 +255,9 @@ const handleSignOut = async () => {
         }
       `}</style>
     </div>
+
+   
+
   );
 };
 
