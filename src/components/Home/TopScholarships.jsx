@@ -13,7 +13,6 @@ import 'swiper/css/pagination';
 
 /**
  * Top Scholarship Skeleton
- * এটি Swiper স্লাইডের ভেতরে ফিট হওয়ার জন্য ডিজাইন করা
  */
 const TopScholarshipSkeleton = () => (
   <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-pulse h-full">
@@ -41,14 +40,14 @@ const TopScholarships = () => {
     },
   });
 
-  // Swiper এর জন্য রেসপনসিভ ব্রেকপয়েন্টস কমন ভেরিয়েবল
+
   const swiperBreakpoints = {
     640: { slidesPerView: 2, spaceBetween: 20 },
     1024: { slidesPerView: 3, spaceBetween: 24 },
     1280: { slidesPerView: 4, spaceBetween: 30 },
   };
 
-  // যদি লোডিং শেষ হয় এবং কোন ডাটা না থাকে
+
   if (!isLoading && scholarships.length === 0) return null;
 
   return (

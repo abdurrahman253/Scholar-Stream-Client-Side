@@ -131,7 +131,7 @@ const MyReviewsTable = () => {
         </div>
       )}
 
-      {/* --- EDIT MODAL (Optimized for Mobile) --- */}
+      {/* --- EDIT MODAL  --- */}
       <Transition show={isEditOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[100]" onClose={() => setIsEditOpen(false)}>
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity" />

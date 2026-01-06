@@ -12,10 +12,10 @@ import {
   UserCircle,
   LogIn,
   UserPlus
-} from 'lucide-react'; // Lucide icons imported
+} from 'lucide-react'; 
 import Container from '../Container';
 import useAuth from '../../../hooks/useAuth';
-import avatarImg from '../../../assets/images/placeholder.jpg';
+
 
 const Navbar = () => {
   const { user, logOut } = useAuth();

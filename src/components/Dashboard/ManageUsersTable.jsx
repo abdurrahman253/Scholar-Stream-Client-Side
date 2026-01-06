@@ -56,7 +56,7 @@ const ManageUsersTable = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50 pb-10">
-      {/* স্লিম হেডার */}
+     
       <div className="sticky top-0 z-30 bg-white/70 backdrop-blur-md border-b border-slate-100 px-4 py-4">
         <div className="max-w-4xl mx-auto flex flex-col gap-4">
           <div className="flex items-center justify-between">
@@ -92,10 +92,10 @@ const ManageUsersTable = () => {
                   key={user._id}
                   className="bg-white rounded-2xl border border-slate-100 p-3 shadow-sm flex items-center gap-3 relative overflow-hidden group"
                 >
-                  {/* সাইড রোল ইন্ডিকেটর */}
+              
                   <div className={`absolute left-0 top-0 bottom-0 w-1 ${roleInfo.color.replace('text', 'bg')}`} />
 
-                  {/* ইউজার ইমেজ (ছোট) */}
+                
                   <div className="relative flex-shrink-0">
                     <img
                       src={user.photoURL || 'https://i.ibb.co/0Qck0mC/user.png'}
@@ -107,7 +107,6 @@ const ManageUsersTable = () => {
                     </div>
                   </div>
 
-                  {/* ইউজার ইনফো */}
                   <div className="flex-grow min-w-0">
                     <h3 className="text-sm font-bold text-slate-800 truncate leading-none mb-1">
                       {user.name || 'Anonymous'}
@@ -117,7 +116,7 @@ const ManageUsersTable = () => {
                     </p>
                   </div>
 
-                  {/* ছোট রোল সিলেক্টর এবং ডিলিট বাটন */}
+               
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <select
@@ -145,7 +144,7 @@ const ManageUsersTable = () => {
           </AnimatePresence>
         </div>
 
-        {/* এম্পটি স্টেট */}
+      
         {filteredUsers.length === 0 && (
           <div className="text-center py-10 opacity-50">
             <TbUsersGroup size={32} className="mx-auto mb-2 text-slate-300" />

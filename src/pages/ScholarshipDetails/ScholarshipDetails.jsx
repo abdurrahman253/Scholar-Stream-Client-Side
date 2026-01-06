@@ -111,7 +111,7 @@ const ScholarshipDetails = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
-      {/* Hero Section - Optimized for Mobile */}
+     
       <div className="relative h-[350px] md:h-[500px] lg:h-[600px] w-full overflow-hidden">
         <motion.img
           initial={{ scale: 1.1 }}

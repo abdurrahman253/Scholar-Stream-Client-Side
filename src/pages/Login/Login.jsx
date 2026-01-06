@@ -16,7 +16,6 @@ const Login = () => {
   const from = location.state || '/'
  
 
-  // React Hook Form
   const {
     register,
     handleSubmit,
@@ -30,10 +29,9 @@ const Login = () => {
   const { email, password } = data;
 
   try {
-    // signIn থেকে user রিটার্ন নাও
+  
     const result = await signIn(email, password);
-    const loggedInUser = result.user; // এটা Firebase থেকে আসবে
-
+    const loggedInUser = result.user; 
     await saveOrUpdateUser({
       name: loggedInUser?.displayName || 'Anonymous',
       email: loggedInUser?.email,

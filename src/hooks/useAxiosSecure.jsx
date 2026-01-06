@@ -14,13 +14,13 @@ const useAxiosSecure = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Request Interceptor - Fresh token পাঠানো
+
     const requestIntercept = axiosSecure.interceptors.request.use(
       async (config) => {
         if (user) {
           try {
-            // 🔥 Force refresh token to get fresh one
-            const token = await user.getIdToken(true); // true = force refresh
+         
+            const token = await user.getIdToken(true); 
             config.headers.Authorization = `Bearer ${token}`;
           } catch (error) {
             console.error('Error getting fresh token:', error);
@@ -33,13 +33,13 @@ const useAxiosSecure = () => {
       }
     );
 
-    // Response Interceptor - 401/403 handle করা
+
     const responseIntercept = axiosSecure.interceptors.response.use(
       (response) => response,
       async (error) => {
         const status = error.response?.status;
 
-        // If token expired or unauthorized
+      
         if (status === 401 || status === 403) {
           console.error('Token expired or unauthorized. Logging out...');
           await logOut();

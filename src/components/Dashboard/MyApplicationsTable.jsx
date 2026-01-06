@@ -17,11 +17,11 @@ const MyApplicationsTable = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
 
-  // Get current Firebase user
+ 
   const auth = getAuth();
   const currentUser = auth.currentUser;
 
-  // Fetch Applications Data
+  
   const { data: response = {}, isLoading } = useQuery({
     queryKey: ['myApplications'],
     queryFn: async () => {
@@ -167,7 +167,7 @@ const MyApplicationsTable = () => {
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-2 mt-auto">
-                {/* View Details Button - Always Visible */}
+             
                 <button
                   onClick={() => handleDetails(app)}
                   className="flex items-center justify-center gap-2 py-2.5 bg-slate-50 text-slate-700 rounded-xl font-bold text-[11px] hover:bg-slate-100 transition-colors"
@@ -175,7 +175,7 @@ const MyApplicationsTable = () => {
                   <FaEye size={12} /> View
                 </button>
 
-                {/* Edit Button - Only if Pending */}
+              
                 {app.status === 'pending' && (
                   <button 
                     onClick={() => toast.info('Edit feature coming soon!')}
@@ -185,7 +185,7 @@ const MyApplicationsTable = () => {
                   </button>
                 )}
 
-                {/* Complete Payment Button - Only if Pending Payment */}
+         
                 {app.status === 'pending' && app.paymentStatus === 'pending' && (
                   <button
                     onClick={() => handlePay(app)}
@@ -195,7 +195,7 @@ const MyApplicationsTable = () => {
                   </button>
                 )}
 
-                {/* Cancel/Delete Button - Only if Pending */}
+               
                 {app.status === 'pending' && (
                   <button
                     onClick={() => {
@@ -210,7 +210,7 @@ const MyApplicationsTable = () => {
                   </button>
                 )}
 
-                {/* Add Review Button - Only if Completed */}
+             
                 {app.status === 'completed' && (
                   <button
                     onClick={() => handleReview(app)}

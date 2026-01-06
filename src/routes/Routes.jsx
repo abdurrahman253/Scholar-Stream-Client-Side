@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/all-scholarships', element: <AllScholarships /> },
       { path: '/scholarships/:id', element: <ScholarshipDetails /> },
-      { path: '/matches', element: <AllScholarships /> }, // যদি থাকে
+      { path: '/matches', element: <AllScholarships /> }, 
       {
         path: '/payment-success',
         element: (

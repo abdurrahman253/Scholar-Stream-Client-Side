@@ -18,7 +18,7 @@ const ScholarshipCard = ({ scholarship }) => {
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
         />
         
-        {/* Category Badge - Minimalist Glass Look */}
+        {/* Category Badge */}
         <div className="absolute top-2 left-2 md:top-4 md:left-4">
           <span className="backdrop-blur-xl bg-white/60 border border-white/40 px-3 py-1 md:px-5 md:py-2 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-[1.5px] text-indigo-700 shadow-sm">
             {scholarshipCategory}
@@ -54,7 +54,7 @@ const ScholarshipCard = ({ scholarship }) => {
             </span>
           </div>
           
-          {/* Action Button - Premium Gradient & Glow */}
+          
           <Link 
             to={`/scholarships/${_id}`}
             className="relative inline-flex items-center justify-center gap-2 px-3 py-2 md:px-7 md:py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-[10px] md:text-xs font-black uppercase rounded-xl md:rounded-2xl shadow-[0_10px_20px_rgba(79,70,229,0.3)] hover:shadow-[0_15px_25px_rgba(79,70,229,0.4)] transition-all duration-300 hover:-translate-y-1 active:scale-95 group/btn overflow-hidden"

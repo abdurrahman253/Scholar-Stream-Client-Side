@@ -14,23 +14,23 @@ const ManageScholarships = () => {
   const [selected, setSelected] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
-  // ✅ Fetch ALL Scholarships (no pagination for admin panel)
+  // ✅ Fetch ALL Scholarships 
   const { data: scholarships = [], isLoading, isError, error } = useQuery({
     queryKey: ['all-scholarships-admin'],
     queryFn: async () => {
       try {
-        // Fetch all scholarships with a very high limit
+     
         const { data } = await axiosSecure.get('/scholarships', {
           params: {
-            limit: 10000, // Very high limit to get all scholarships
+            limit: 10000, 
             page: 1,
             sortBy: 'postDate',
             sortOrder: 'desc'
           }
         });
-        console.log('API Response:', data); // Debug log
+        console.log('API Response:', data); 
         
-        // Handle different response structures
+       
         if (Array.isArray(data)) {
           return data;
         } else if (data?.scholarships && Array.isArray(data.scholarships)) {
@@ -66,22 +66,21 @@ const ManageScholarships = () => {
   });
 
   // ✅ Update Mutation
-  const updateMutation = useMutation({
-    mutationFn: async ({ id, formData }) => {
-      const { data } = await axiosSecure.patch(`/scholarships/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['all-scholarships-admin']);
-      toast.success('Scholarship updated successfully! 🎉');
-      closeModal();
-    },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || 'Failed to update');
-    },
-  });
+ const updateMutation = useMutation({
+  mutationFn: async ({ id, data }) => {
+    const res = await axiosSecure.patch(`/scholarships/${id}`, data);
+    return res.data;
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries(['all-scholarships-admin']);
+    toast.success('Scholarship updated successfully! 🎉');
+    closeModal();
+  },
+  onError: (error) => {
+    toast.error(error.response?.data?.message || 'Failed to update');
+  },
+});
+
 
   const openUpdateModal = (scholarship) => {
     setSelected(scholarship);
@@ -110,30 +109,35 @@ const ManageScholarships = () => {
     if (!window.confirm('Are you sure you want to delete this scholarship?')) return;
     deleteMutation.mutate(id);
   };
-
+ 
   const handleUpdate = async (e) => {
-    e.preventDefault();
+     e.preventDefault();
     const form = e.target;
-    const formData = new FormData();
 
-    formData.append('name', form.name.value);
-    formData.append('university', form.university.value);
-    formData.append('country', form.country.value);
-    formData.append('city', form.city.value);
-    formData.append('worldRank', form.worldRank.value);
-    formData.append('subjectCategory', form.subjectCategory.value);
-    formData.append('scholarshipCategory', form.scholarshipCategory.value);
-    formData.append('degree', form.degree.value);
-    formData.append('applicationFees', form.applicationFees.value);
-    formData.append('serviceCharge', form.serviceCharge.value);
-    formData.append('deadline', form.deadline.value);
-
-    if (form.image.files[0]) {
-      formData.append('image', form.image.files[0]);
-    }
-
-    updateMutation.mutate({ id: selected._id, formData });
+  const payload = {
+    name: form.name.value,
+    university: form.university.value,
+    country: form.country.value,
+    city: form.city.value,
+    worldRank: form.worldRank.value,
+    subjectCategory: form.subjectCategory.value,
+    scholarshipCategory: form.scholarshipCategory.value,
+    degree: form.degree.value,
+    applicationFees: form.applicationFees.value,
+    serviceCharge: form.serviceCharge.value,
+    deadline: form.deadline.value,
   };
+
+  // 🔥 ONLY IF image updated via ImgBB
+  if (imagePreview && imagePreview !== selected.universityImage) {
+    payload.universityImage = imagePreview; // must be URL
+  }
+
+  updateMutation.mutate({
+    id: selected._id,
+    data: payload,
+  });
+};
 
   // Loading State
   if (isLoading) {
@@ -211,7 +215,7 @@ const ManageScholarships = () => {
         </div>
       )}
 
-      {/* Table - Desktop (lg and above) */}
+      {/* Table - Desktop  */}
       {scholarships.length > 0 && (
         <div className="max-w-7xl mx-auto hidden lg:block">
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-purple-100">
@@ -297,7 +301,7 @@ const ManageScholarships = () => {
         </div>
       )}
 
-      {/* Cards - Mobile & Tablet (below lg) */}
+      {/* Cards - Mobile & Tablet  */}
       {scholarships.length > 0 && (
         <div className="max-w-7xl mx-auto lg:hidden space-y-3 sm:space-y-4">
           {scholarships.map((s) => (
@@ -394,7 +398,7 @@ const ManageScholarships = () => {
 
               <form onSubmit={handleUpdate} className="p-4 sm:p-6 lg:p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  {/* Form fields remain the same as in your original code */}
+               
                   <div className="sm:col-span-2">
                     <label className="block text-xs font-black text-gray-700 uppercase tracking-wider mb-2">
                       Scholarship Name *

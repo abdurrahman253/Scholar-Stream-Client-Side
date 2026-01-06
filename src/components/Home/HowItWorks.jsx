@@ -58,21 +58,21 @@ const HowItWorks = () => {
 
         <div className="mt-16 text-center px-6">
   <div className="relative inline-block group">
-    {/* Button Outer Glow - প্রিমিয়াম লাইটিং ইফেক্ট */}
+
     <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
     
     <Link 
       to='/signup' 
       className="relative flex items-center justify-center px-10 py-5 bg-gray-900 text-white font-black rounded-2xl transition-all duration-300 overflow-hidden border border-white/10 shadow-2xl"
     >
-      {/* Animated Shine Effect - বাটনের ওপর দিয়ে একটি আলোর রেখা যাবে */}
+  
       <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
       
       <span className="relative uppercase tracking-[2px] text-sm">
         Get Started Now
       </span>
       
-      {/* Icon with hover movement */}
+      
       <svg 
         className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" 
         fill="none" 
@@ -84,12 +84,12 @@ const HowItWorks = () => {
     </Link>
   </div>
 
-  {/* Button এর নিচের ছোট টেক্সট যা বিশ্বাসযোগ্যতা বাড়ায় */}
+ 
   <p className="mt-6 text-[10px] font-bold text-gray-400 uppercase tracking-[3px] opacity-70">
     Join 2,000+ Students Today
   </p>
 
-  {/* TailWind Config এ এই এনিমেশনটি লাগবে shimmer এর জন্য */}
+
   <style>{`
     @keyframes shimmer {
       100% {

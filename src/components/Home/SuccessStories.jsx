@@ -1,10 +1,10 @@
 import { FaQuoteLeft, FaStar, FaGraduationCap, FaCheckCircle } from 'react-icons/fa'
 import { HiSparkles } from 'react-icons/hi'
 import { motion } from 'framer-motion'
-// ArrowRight ইমপোর্ট করা হলো
+
 import { ArrowRight } from 'lucide-react' 
 import Container from '../Shared/Container'
-import { Link } from 'react-router-dom' // Link এর জন্য এটি নিশ্চিত করুন
+import { Link } from 'react-router-dom' 
 
 const SuccessStories = () => {
   const stories = [

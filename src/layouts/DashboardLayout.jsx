@@ -34,7 +34,7 @@ import toast from 'react-hot-toast';
 import FloatingContactWidget from '../components/FloatingContactWidget/FloatingContactWidget';
 
 const DashboardLayout = () => {
-  const location = useLocation(); // ← For reading navigation state
+  const location = useLocation(); 
   const { role, loading } = useRole();
   const { logOut, user } = useAuth();
   const navigate = useNavigate();

@@ -7,10 +7,7 @@ import { FaSearch, FaChevronLeft, FaChevronRight, FaGraduationCap } from 'react-
 import Container from '../components/Shared/Container';
 import ScholarshipCard from '../components/Home/ScholarshipCard';
 
-/**
- * Modern Skeleton Card Component
- * ডাটা লোড হওয়ার সময় এই সুন্দর কাঠামোটি দেখাবে
- */
+
 const ScholarshipSkeleton = () => (
   <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-pulse">
     <div className="w-full h-44 bg-slate-200 rounded-2xl mb-4"></div>

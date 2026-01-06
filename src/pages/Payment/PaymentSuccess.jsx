@@ -68,7 +68,7 @@ const PaymentSuccess = () => {
                     <h2 className="text-2xl font-bold text-red-800 mb-2">Payment Error</h2>
                     <p className="text-pink-600 mb-6">{error}</p>
                     <button
-                        onClick={() => navigate('/dashboard', { state: { section: 'my-applications' } })} // ✅ Fixed
+                        onClick={() => navigate('/dashboard', { state: { section: 'my-applications' } })} 
                         className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700"
                     >
                         Return to Dashboard
@@ -151,13 +151,13 @@ const PaymentSuccess = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3">
                     <button
-                        onClick={() => navigate('/dashboard', { state: { section: 'my-applications' } })} // ✅ Fixed
+                        onClick={() => navigate('/dashboard', { state: { section: 'my-applications' } })} 
                         className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition font-semibold"
                     >
                         Go to My Applications
                     </button>
                     <button
-                        onClick={() => navigate('/all-scholarships')} // ✅ Fixed route
+                        onClick={() => navigate('/all-scholarships')} 
                         className="flex-1 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition font-semibold"
                     >
                         Browse More Scholarships

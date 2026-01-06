@@ -19,7 +19,7 @@ const ParallaxLogos = ({ baseVelocity }) => {
   const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
   const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], { clamp: false });
 
-  // Perfect seamless infinite loop with 4 duplicated sets
+  
   const x = useTransform(baseX, (v) => `${wrap(-100, 0, v)}%`);
 
   const directionFactor = useRef(1);
@@ -70,7 +70,7 @@ const ParallaxLogos = ({ baseVelocity }) => {
         {logoElements}
         {logoElements}
         {logoElements}
-        {logoElements} {/* 4 sets = ultra-smooth infinite scroll */}
+        {logoElements} 
       </motion.div>
     </div>
   );

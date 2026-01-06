@@ -16,7 +16,7 @@ const useRole = () => {
       }
       try {
         const token = await user.getIdToken();
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/user/role`, {  // FIXED: Removed /${user.email}
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/user/role`, {  
           headers: { authorization: `Bearer ${token}` }
         });
         if (!res.ok) throw new Error('Failed to fetch role');

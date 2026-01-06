@@ -5,8 +5,8 @@ import useAuth from '../../hooks/useAuth'
 import { toast } from 'react-hot-toast'
 import { TbFidgetSpinner } from 'react-icons/tb'
 import { useForm } from 'react-hook-form'
-import { imageUpload } from '../../utils'
 import { saveOrUpdateUser } from '../../utils/api'
+import { imageUpload } from '../../utils/imageUpload'
 
 const SignUp = () => {
   const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth()

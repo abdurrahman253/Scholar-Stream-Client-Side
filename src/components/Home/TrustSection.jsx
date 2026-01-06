@@ -17,7 +17,7 @@ const TrustSection = () => {
       <Container>
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-24">
           
-          {/* Left Side: Stats & Trustpilot */}
+       
           <motion.div 
             {...fadeInUp}
             className="w-full lg:w-1/3 text-center lg:text-left space-y-4 md:space-y-8"
@@ -84,7 +84,7 @@ const TrustSection = () => {
               </ul>
             </motion.div>
 
-            {/* Floating Illustration (Hidden on Mobile/Tablet) */}
+         
             <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 hidden xl:block">
               <motion.div animate={{ y: [0, -20, 0] }} transition={{ duration: 6, repeat: Infinity }}>
                 <img 
@@ -97,7 +97,7 @@ const TrustSection = () => {
           </div>
         </div>
 
-        {/* --- Premium Bottom Banner (Mobile Optimized) --- */}
+     
         <motion.div 
           className="mt-12 md:mt-24 relative rounded-[2rem] md:rounded-[3rem] p-8 md:p-20 text-center overflow-hidden bg-gray-900"
         >

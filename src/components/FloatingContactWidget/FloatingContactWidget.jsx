@@ -13,7 +13,7 @@ const FloatingContactWidget = () => {
     whatsapp: '8801777678707', 
     messengerPage: 'abdur.rahman.36807', 
     
-    // Professional welcome messages
+    
     whatsappWelcome: 'Hello! 👋 Welcome to ScholarStream.\nI need help with scholarship applications and guidance. Please assist me.',
     messengerWelcome: 'Hi there! 👋 I am interested in scholarships on ScholarStream. Can you guide me?',
   };
@@ -64,9 +64,9 @@ const FloatingContactWidget = () => {
 
   return (
     <>
-      {/* Floating Widget - Bottom Right */}
+
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-        {/* Contact Buttons - Animated Slide Up */}
+
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -162,7 +162,7 @@ const FloatingContactWidget = () => {
           <span className="absolute inset-0 rounded-full border-4 border-white/20 animate-ping"></span>
         </motion.button>
 
-        {/* Optional Help Text (appears briefly) */}
+      
         {!isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
