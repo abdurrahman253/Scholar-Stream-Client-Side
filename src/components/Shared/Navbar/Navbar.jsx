@@ -1,261 +1,245 @@
-import { useState, useEffect } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { AiOutlineMenu } from 'react-icons/ai'
-import { HiOutlineX } from 'react-icons/hi'
-import { FaGraduationCap } from 'react-icons/fa'
-import Container from '../Container'
-import useAuth from '../../../hooks/useAuth'
-import avatarImg from '../../../assets/images/placeholder.jpg'
+// src/components/Navbar/Navbar.jsx
+import { useState, useEffect } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { FaGraduationCap } from 'react-icons/fa';
+import { 
+  LayoutDashboard, 
+  LogOut, 
+  Home, 
+  GraduationCap, 
+  Menu, 
+  X, 
+  UserCircle,
+  LogIn,
+  UserPlus
+} from 'lucide-react'; // Lucide icons imported
+import Container from '../Container';
+import useAuth from '../../../hooks/useAuth';
+import avatarImg from '../../../assets/images/placeholder.jpg';
 
 const Navbar = () => {
-  const { user, logOut } = useAuth()
-  const [isOpen, setIsOpen] = useState(false)
+  const { user, logOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen])
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
 
-  // Auto close mobile menu on resize (when entering desktop)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsOpen(false)
-      }
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+      if (window.innerWidth >= 1024) setIsOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
- const navLinks = (
-  <>
-    <NavLink
-      to="/"
-      onClick={() => setIsOpen(false)}
-      className={({ isActive }) =>
-        `block w-full md:w-auto text-left px-5 py-2.5 rounded-xl font-medium transition-all ${
-          isActive
-            ? 'bg-indigo-50 text-indigo-600 shadow-sm ring-1 ring-indigo-100' // Active Style
-            : 'text-gray-700 hover:text-indigo-600 hover:bg-indigo-50' // Normal Style
-        }`
-      }
-    >
-      Home
-    </NavLink>
+  const navLinkClasses = ({ isActive }) =>
+    `block w-full md:w-auto px-6 py-3 rounded-xl font-bold transition-all duration-300 text-left
+    ${isActive
+      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-200 scale-[1.02]'
+      : 'text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 hover:shadow-md hover:scale-[1.02]'
+    }`;
 
-    <NavLink
-      to="/all-scholarships"
-      onClick={() => setIsOpen(false)}
-      className={({ isActive }) =>
-        `block w-full md:w-auto text-left px-5 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
-          isActive
-            ? 'bg-indigo-50 text-indigo-600 shadow-sm ring-1 ring-indigo-100' // Active Style
-            : 'text-gray-700 hover:text-indigo-600 hover:bg-indigo-50' // Normal Style
-        }`
-      }
-    >
-      All Scholarships
-    </NavLink>
-  </>
-)
   return (
     <>
-      {/* Fixed Navbar */}
-      <div className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 shadow-sm border-b border-gray-100">
-        <div className="py-3 lg:py-4">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-xl border-b border-gray-200 shadow-md transition-all duration-500">
+        <div className="py-4 lg:py-5">
           <Container>
             <div className="flex items-center justify-between">
-              {/* Logo - Responsive sizing */}
-              <Link to="/" className="flex items-center gap-2 group">
-                <div className="relative flex-shrink-0">
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg blur-md group-hover:blur-lg transition-all duration-500 opacity-70"></div>
-                  <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 p-2 rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-500">
-                    <FaGraduationCap className="w-5 h-5 text-gray-900 sm:w-6 sm:h-6" />
-                  </div>
+
+              {/* Logo */}
+              <Link to="/" className="flex items-center gap-3 group">
+                <div className="p-3 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                  <FaGraduationCap className="w-7 h-7 text-white" />
                 </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    ScholarStream
-                  </span>
-                  <span className="hidden sm:block text-xs text-gray-500 tracking-wider">
-                    Find Your Future
-                  </span>
+                <div>
+                  <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                    Scholar<span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Stream</span>
+                  </h1>
+                  <p className="hidden sm:block text-xs font-bold text-indigo-600 tracking-widest uppercase">
+                    Empowering Dreams
+                  </p>
                 </div>
               </Link>
 
-              {/* Desktop & Tablet Navigation */}
-              <div className="hidden md:flex items-center gap-6">
-                {navLinks}
-              </div>
+              {/* Desktop Nav */}
+              <nav className="hidden md:flex items-center gap-2">
+                <NavLink to="/" className={navLinkClasses}>Home</NavLink>
+                <NavLink to="/all-scholarships" className={navLinkClasses}>All Scholarships</NavLink>
+              </nav>
 
-              {/* Auth Buttons (Desktop) + Mobile Menu Toggle */}
-              <div className="flex items-center gap-3">
-                {/* Desktop Auth */}
+              {/* Right Controls */}
+              <div className="flex items-center gap-4">
                 <div className="hidden md:flex items-center gap-4">
                   {user ? (
                     <div className="relative group">
-                      <button className="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 rounded-full px-3 py-1.5 transition-all border border-gray-200 hover:border-indigo-300">
-                        <span className="text-sm font-medium text-gray-800 hidden lg:block">
-                          {user.displayName || 'User'}
-                        </span>
+                      <button className="relative group/avatar">
                         <img
                           src={user.photoURL || avatarImg}
                           alt="Profile"
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 border-white shadow"
+                          className="w-11 h-11 rounded-full object-cover ring-4 ring-indigo-100 group-hover/avatar:ring-indigo-300 shadow-lg group-hover/avatar:shadow-xl transition-all duration-300"
                           referrerPolicy="no-referrer"
                         />
+                        <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full ring-2 ring-white shadow-md"></span>
                       </button>
 
-                      {/* Dropdown */}
-                      <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                        <div className="p-4 bg-gradient-to-br from-indigo-50 to-purple-50">
-                          <p className="font-semibold text-gray-900">{user.displayName || 'User'}</p>
-                          <p className="text-xs text-gray-600 truncate">{user.email}</p>
+                      {/* Desktop Dropdown */}
+                      <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border-2 border-indigo-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
+                        <div className="p-5 bg-gradient-to-br from-indigo-50 to-purple-50 border-b border-indigo-100">
+                          <p className="font-bold text-gray-900">{user.displayName || 'Learner'}</p>
+                          <p className="text-sm text-indigo-600 truncate">{user.email}</p>
                         </div>
-                        <div className="py-1">
-                          <Link to="/dashboard" className="block px-4 py-2.5 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">
-                            Dashboard
+                        <div className="p-3 space-y-1">
+                          <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200">
+                            <LayoutDashboard size={18} className="text-indigo-500" />
+                            <span>My Dashboard</span>
                           </Link>
-                          <button onClick={logOut} className="w-full text-left px-4 py-2.5 text-pink-600 hover:bg-red-50">
-                            Logout
+                          <button onClick={logOut} className="w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all duration-200">
+                            <LogOut size={18} />
+                            <span>Sign Out</span>
                           </button>
                         </div>
                       </div>
                     </div>
                   ) : (
-                   <div className="flex items-center gap-3">
-                 {/* Login Button */}
-                  <Link to="/login" className="nav-auth-btn group">
-                  <div className="nav-auth-inner">
-                 <svg
-                className="w-5 h-5 fill-indigo-400 group-hover:fill-white transition-colors"
-                 viewBox="0 0 24 24"
-                        >
-                <path d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z" />
-                  </svg>
-                <span>Login</span>
-                </div>
-               </Link>
-
-               {/* Register Button */}
-               <Link to="/signup" className="nav-auth-btn group !bg-indigo-600">
-              <div className="nav-auth-inner !bg-indigo-600 group-hover:!bg-indigo-700">
-                  <span>Register</span>
-                 </div>
-                   </Link>
-                </div>
+                    <div className="flex gap-3">
+                      <Link to="/login" className="px-6 py-2.5 font-bold text-gray-700 hover:text-indigo-600 transition-all duration-300 hover:scale-105">
+                        Login
+                      </Link>
+                      <Link to="/signup" className="relative px-7 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 overflow-hidden group">
+                        <span className="relative z-10">Register</span>
+                      </Link>
+                    </div>
                   )}
                 </div>
 
-                {/* Mobile Menu Toggle */}
+                {/* Mobile Toggle */}
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className="md:hidden p-2.5 rounded-lg hover:bg-gray-100 transition"
-                  aria-label="Toggle menu"
+                  className="md:hidden relative p-3 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-100 hover:border-indigo-300 transition-all duration-300 group"
                 >
-                  {isOpen ? <HiOutlineX className="w-6 h-6" /> : <AiOutlineMenu className="w-6 h-6" />}
+                  <div className="relative w-6 h-6">
+                    {isOpen ? (
+                      <X className="w-6 h-6 text-indigo-600 transition-transform duration-300 rotate-90" />
+                    ) : (
+                      <Menu className="w-6 h-6 text-indigo-600 transition-transform duration-300 group-hover:scale-110" />
+                    )}
+                  </div>
                 </button>
               </div>
             </div>
           </Container>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile Sidebar Drawer */}
-      <div
-        className={`fixed inset-y-0 right-0 w-80 max-w-[90vw] bg-white shadow-2xl z-50 transform transition-transform duration-400 ease-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        } md:hidden`}
-      >
+      {/* Mobile Sidebar */}
+      <div className={`fixed inset-y-0 right-0 w-80 bg-gradient-to-br from-white via-indigo-50/30 to-purple-50/30 backdrop-blur-2xl shadow-2xl z-50 transform transition-all duration-500 ease-out md:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-5 border-b">
-            <h3 className="text-xl font-bold text-gray-900">Menu</h3>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition"
-              aria-label="Close menu"
-            >
-              <HiOutlineX className="w-6 h-6" />
-            </button>
+          <div className="relative p-6 border-b border-indigo-100 bg-gradient-to-r from-indigo-500/5 to-purple-500/5">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-black text-gray-900">Menu</h2>
+                <p className="text-xs text-indigo-600 font-semibold mt-0.5">Navigate your journey</p>
+              </div>
+              <button 
+                onClick={() => setIsOpen(false)} 
+                className="p-2.5 rounded-xl bg-white hover:bg-indigo-50 border-2 border-indigo-100 hover:border-indigo-300 transition-all duration-300 group"
+              >
+                <X className="w-6 h-6 text-indigo-600 group-hover:rotate-90 transition-transform duration-300" />
+              </button>
+            </div>
           </div>
 
-          <nav className="flex-1 p-6 space-y-1 overflow-y-auto">
-            {navLinks}
+          <nav className="flex-1 p-6 space-y-2 overflow-y-auto">
+            <NavLink to="/" onClick={() => setIsOpen(false)} className={navLinkClasses}>
+              <span className="flex items-center gap-3">
+                <Home size={18} />
+                <span>Home</span>
+              </span>
+            </NavLink>
+            <NavLink to="/all-scholarships" onClick={() => setIsOpen(false)} className={navLinkClasses}>
+              <span className="flex items-center gap-3">
+                <GraduationCap size={18} />
+                <span>All Scholarships</span>
+              </span>
+            </NavLink>
 
-            {user ? (
-              <div className="mt-8 pt-6 border-t">
-                <div className="flex items-center gap-4 mb-6">
-                  <img
-                    src={user.photoURL || avatarImg}
-                    alt="Profile"
-                    className="w-16 h-16 rounded-full border-4 border-indigo-100 shadow-lg object-cover"
-                  />
-                  <div>
-                    <p className="font-bold text-gray-900">{user.displayName || 'User'}</p>
-                    <p className="text-sm text-gray-600 truncate max-w-[200px]">{user.email}</p>
+            <div className="pt-6 border-t border-indigo-100 space-y-4 mt-4">
+              {user ? (
+                <>
+                  <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 shadow-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <img 
+                          src={user.photoURL || avatarImg} 
+                          className="w-14 h-14 rounded-full ring-4 ring-white shadow-lg object-cover" 
+                          alt="Profile" 
+                        />
+                        <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-400 rounded-full ring-2 ring-white"></span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-white truncate">{user.displayName || 'Learner'}</p>
+                        <p className="text-xs text-indigo-100 truncate">{user.email}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-               <NavLink 
-                 to="/dashboard" 
-                 className={({ isActive }) => 
-                 `block px-4 py-2.5 transition-all ${
-                  isActive ? 'bg-indigo-50 text-indigo-600 font-bold' : 'text-gray-700 hover:bg-indigo-50'
-                   }`
-                     }
+                  
+                  <NavLink to="/dashboard" onClick={() => setIsOpen(false)} className={navLinkClasses}>
+                    <span className="flex items-center gap-3">
+                      <LayoutDashboard size={18} />
+                      <span>My Dashboard</span>
+                    </span>
+                  </NavLink>
+                  
+                  <button 
+                    onClick={() => { logOut(); setIsOpen(false); }} 
+                    className="w-full px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3"
                   >
-                  Dashboard
-               </NavLink>
-                <button
-                  onClick={() => {
-                    logOut()
-                    setIsOpen(false)
-                  }}
-                  className="w-full py-4 text-pink-600 font-semibold hover:bg-red-50 rounded-xl transition"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="mt-8 pt-6 border-t space-y-4">
-                <Link
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full text-center py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full text-center py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-900 font-bold rounded-xl shadow-lg hover:shadow-xl transition"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </button>
+                </>
+              ) : (
+                <div className="space-y-3">
+                  <Link 
+                    to="/login" 
+                    onClick={() => setIsOpen(false)} 
+                    className="flex items-center justify-center gap-2 w-full py-3.5 border-2 border-indigo-300 rounded-xl font-bold text-indigo-600 transition-all duration-300"
+                  >
+                    <LogIn size={18} /> Login
+                  </Link>
+                  <Link 
+                    to="/signup" 
+                    onClick={() => setIsOpen(false)} 
+                    className="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg transition-all duration-300"
+                  >
+                    <UserPlus size={18} /> Register
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
+          
+          <div className="p-6 border-t border-indigo-100 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 text-center">
+            <div className="flex items-center justify-center gap-2 text-xs font-semibold text-gray-500">
+              <FaGraduationCap className="text-indigo-600" />
+              <span>ScholarStream © 2026</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Backdrop */}
       {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
-          onClick={() => setIsOpen(false)}
+        <div 
+          onClick={() => setIsOpen(false)} 
+          className="fixed inset-0 bg-gradient-to-br from-black/60 via-indigo-900/30 to-purple-900/30 backdrop-blur-md z-40 md:hidden"
         />
       )}
 
-      {/* Spacer to prevent content jump */}
-      <div className="h-16 md:h-20" />
+      <div className="h-20 lg:h-24" />
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

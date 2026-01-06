@@ -142,7 +142,7 @@ const handleSignOut = async () => {
                 className={`
                   w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group
                   ${activeSection === link.section
-                    ? 'bg-slate-900 text-white shadow-2xl shadow-slate-300 scale-[1.02]'
+                    ? 'bg-indigo-600 text-white shadow-2xl shadow-slate-300 scale-[1.02]'
                     : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'}
                 `}
               >

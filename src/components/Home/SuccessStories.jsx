@@ -1,202 +1,102 @@
 import { FaQuoteLeft, FaStar, FaGraduationCap, FaCheckCircle } from 'react-icons/fa'
 import { HiSparkles } from 'react-icons/hi'
+import { motion } from 'framer-motion'
+// ArrowRight ইমপোর্ট করা হলো
+import { ArrowRight } from 'lucide-react' 
 import Container from '../Shared/Container'
+import { Link } from 'react-router-dom' // Link এর জন্য এটি নিশ্চিত করুন
 
 const SuccessStories = () => {
   const stories = [
-    { 
-      name: "Sarah Rahman", 
-      uni: "Oxford University", 
-      country: "United Kingdom",
-      degree: "Masters in Law",
-      amount: "$55,000",
-      img: "https://i.postimg.cc/PxW374Kn/Maddie-C.webp",
-      quote: "ScholarStream transformed my dream of studying at Oxford into reality!",
-      color: "142, 249, 252"
-    },
-    { 
-      name: "Ariful Islam", 
-      uni: "MIT", 
-      country: "United States",
-      degree: "PhD in Computer Science",
-      amount: "$52,000",
-      img: "https://i.postimg.cc/fWHjRp3L/Aaron-H.webp",
-      quote: "The application tracking kept me organized throughout my journey!",
-      color: "142, 252, 204"
-    },
-    { 
-      name: "Tanvir Hasan", 
-      uni: "Stanford University", 
-      country: "United States",
-      degree: "MBA",
-      amount: "$60,000",
-      img: "https://i.postimg.cc/k4T8DRgw/Collin-L.webp",
-      quote: "ScholarStream guided me every step. Now I'm at Stanford!",
-      color: "215, 252, 142"
-    },
-    { 
-      name: "Nadia Akter", 
-      uni: "Harvard University", 
-      country: "United States",
-      degree: "Masters in Public Health",
-      amount: "$50,000",
-      img: "https://i.postimg.cc/8P2vFSNm/Krrisha-P.webp",
-      quote: "Found scholarships I never knew existed. Harvard was the beginning!",
-      color: "252, 208, 142"
-    },
-    { 
-      name: "M. Abdullah", 
-      uni: "Yale University", 
-      country: "United States",
-      degree: "Masters in Economics",
-      amount: "$48,000",
-      img: "https://i.postimg.cc/CKNn6nk5/Matteo-P.webp",
-      quote: "Connected me with opportunities that perfectly matched my profile.",
-      color: "252, 142, 239"
-    },
-    { 
-      name: "Sumaiya Khan", 
-      uni: "Cambridge University", 
-      country: "United Kingdom",
-      degree: "PhD in Engineering",
-      amount: "$45,000",
-      img: "https://i.postimg.cc/9FnpJKVs/Nour-I.webp",
-      quote: "User-friendly interface made my search stress-free!",
-      color: "204, 142, 252"
-    },
-    { 
-      name: "Rakib Ahmed", 
-      uni: "UCL", 
-      country: "United Kingdom",
-      degree: "Masters in Architecture",
-      amount: "$42,000",
-      img: "https://i.postimg.cc/FsLdXB3J/Tyrese-B.webp",
-      quote: "The platform opened doors I never thought possible!",
-      color: "252, 142, 142"
-    },
-    { 
-      name: "Zarin Tasnim", 
-      uni: "NUS Singapore", 
-      country: "Singapore",
-      degree: "PhD in Data Science",
-      amount: "$46,000",
-      img: "https://i.postimg.cc/XJqqHHnq/Gella-H.webp",
-      quote: "ScholarStream made my international study dreams come true!",
-      color: "142, 202, 252"
-    }
+    { name: "Sarah Rahman", uni: "Oxford University", country: "UK", degree: "Masters in Law", amount: "$55k", img: "https://i.postimg.cc/PxW374Kn/Maddie-C.webp", quote: "ScholarStream transformed my dream of Oxford into reality!", color: "99, 102, 241" },
+    { name: "Ariful Islam", uni: "MIT", country: "USA", degree: "PhD in CS", amount: "$52k", img: "https://i.postimg.cc/fWHjRp3L/Aaron-H.webp", quote: "The application tracking kept me organized throughout!", color: "16, 185, 129" },
+    { name: "Tanvir Hasan", uni: "Stanford", country: "USA", degree: "MBA", amount: "$60k", img: "https://i.postimg.cc/k4T8DRgw/Collin-L.webp", quote: "Guided me every step. Now I'm at Stanford!", color: "245, 158, 11" },
+    { name: "Nadia Akter", uni: "Harvard", country: "USA", degree: "Masters in PH", amount: "$50k", img: "https://i.postimg.cc/8P2vFSNm/Krrisha-P.webp", quote: "Found scholarships I never knew existed. Harvard was the start!", color: "236, 72, 153" },
+    { name: "M. Abdullah", uni: "Yale University", country: "USA", degree: "Masters Econ", amount: "$48k", img: "https://i.postimg.cc/CKNn6nk5/Matteo-P.webp", quote: "Matched me with opportunities that perfectly fit my profile.", color: "139, 92, 246" },
+    { name: "Sumaiya Khan", uni: "Cambridge", country: "UK", degree: "PhD Eng", amount: "$45k", img: "https://i.postimg.cc/9FnpJKVs/Nour-I.webp", quote: "User-friendly interface made my search stress-free!", color: "20, 184, 166" },
+    { name: "Rakib Ahmed", uni: "UCL", country: "UK", degree: "Masters Arch", amount: "$42k", img: "https://i.postimg.cc/FsLdXB3J/Tyrese-B.webp", quote: "The platform opened doors I never thought possible!", color: "239, 68, 68" },
+    { name: "Zarin Tasnim", uni: "NUS Singapore", country: "SG", degree: "PhD Data Sc", amount: "$46k", img: "https://i.postimg.cc/XJqqHHnq/Gella-H.webp", quote: "Made my international study dreams finally come true!", color: "59, 130, 246" }
   ]
 
   return (
-    <div className='py-20 bg-gradient-to-br from-gray-50 via-indigo-50/30 to-purple-50/30 relative overflow-hidden'>
-      {/* Background Decorations */}
-      <div className='absolute inset-0 opacity-10'>
-        <div className='absolute top-20 left-10 w-72 h-72 bg-indigo-500 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-20 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl'></div>
+    <div className='py-16 md:py-24 bg-white relative overflow-hidden'>
+      {/* Soft Premium Glows */}
+      <div className='absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none'>
+        <div className='absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-50/50 blur-[120px] rounded-full'></div>
+        <div className='absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-50/50 blur-[120px] rounded-full'></div>
       </div>
 
       <Container>
-        {/* Header */}
-        <div className='text-center mb-16 relative z-10'>
-          <div className='inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full border border-indigo-200 mb-4'>
-            <HiSparkles className='w-5 h-5 text-yellow-500 animate-pulse' />
-            <span className='text-sm font-semibold text-gray-700'>Success Stories</span>
-          </div>
+        {/* Header Section */}
+        <div className='text-center mb-12 md:mb-20 relative z-10 px-4'>
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className='inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 rounded-full border border-indigo-100 mb-4'
+          >
+            <HiSparkles className='w-4 h-4 text-indigo-600' />
+            <span className='text-[10px] md:text-xs font-bold text-indigo-700 uppercase tracking-widest'>Success Stories</span>
+          </motion.div>
           
-          <h2 className='text-4xl md:text-5xl font-bold text-gray-900 mb-4'>
-            Inspiring{' '}
-            <span className='bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent'>
-              Scholar Journeys
-            </span>
+          <h2 className='text-3xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight leading-tight'>
+            Inspiring <span className='text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600'>Scholar Journeys</span>
           </h2>
-          <p className='text-gray-600 max-w-2xl mx-auto text-lg'>
-            Meet our scholars who transformed their educational dreams into reality through ScholarStream
-          </p>
           
-          {/* Stats */}
-          <div className='flex flex-wrap justify-center gap-8 mt-8'>
-            <div className='text-center'>
-              <p className='text-3xl font-bold text-indigo-600'>2000+</p>
-              <p className='text-sm text-gray-600'>Success Stories</p>
-            </div>
-            <div className='text-center'>
-              <p className='text-3xl font-bold text-purple-600'>$120M+</p>
-              <p className='text-sm text-gray-600'>Scholarships Won</p>
-            </div>
-            <div className='text-center'>
-              <p className='text-3xl font-bold text-pink-600'>98.9%</p>
-              <p className='text-sm text-gray-600'>Satisfaction Rate</p>
-            </div>
+          <div className='flex justify-center gap-4 md:gap-12 mt-6 py-4 border-y border-gray-50 bg-white/50 backdrop-blur-sm'>
+            {[
+              { val: "2k+", label: "Stories" },
+              { val: "$120M+", label: "Won" },
+              { val: "99%", label: "Happy" }
+            ].map((stat, i) => (
+              <div key={i} className='text-center'>
+                <p className='text-lg md:text-2xl font-black text-gray-900 leading-none'>{stat.val}</p>
+                <p className='text-[10px] md:text-xs text-gray-500 font-bold uppercase mt-1 tracking-tighter'>{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* 3D Rotating Cards */}
+        {/* 3D Carousel Wrapper */}
         <div className='success-wrapper'>
           <div className='success-inner' style={{ '--quantity': stories.length }}>
             {stories.map((story, index) => (
               <div 
                 key={index} 
-                className='success-card' 
-                style={{ 
-                  '--index': index,
-                  '--color-card': story.color
-                }}
+                className='success-card group' 
+                style={{ '--index': index, '--color-card': story.color }}
               >
-                <div className='card-content'>
-                  {/* Gradient Overlay */}
-                  <div className='absolute top-0 left-0 right-0 h-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-t-2xl'></div>
-                  
-                  {/* Profile Section */}
-                  <div className='relative pt-10 pb-3 flex flex-col items-center'>
-                    {/* Image with Badge */}
-                    <div className='relative mb-2'>
-                      <div className='absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full blur-md opacity-75'></div>
-                      <img
-                        src={story.img}
-                        alt={story.name}
-                        className='relative w-16 h-16 rounded-full object-cover border-3 border-white shadow-xl'
-                      />
-                      {/* Success Badge */}
-                      <div className='absolute -bottom-1 -right-1 w-7 h-7 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white'>
-                        <FaCheckCircle className='w-3.5 h-3.5 text-gray-900' />
+                <div className='card-content p-4 flex flex-col items-center justify-between h-full border border-gray-100 bg-white rounded-2xl'>
+                  <div className='w-full flex flex-col items-center'>
+                    <div className='relative mb-3'>
+                      <div className='absolute -inset-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity'></div>
+                      <img src={story.img} alt={story.name} className='relative w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-white shadow-lg' />
+                      <div className='absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center border-2 border-white'>
+                        <FaCheckCircle className='w-2.5 h-2.5 text-white' />
                       </div>
                     </div>
+                    
+                    <h3 className='text-xs md:text-sm font-black text-gray-900 text-center leading-none'>{story.name}</h3>
+                    <p className='text-[9px] md:text-[10px] font-bold text-indigo-600 mt-1 flex items-center gap-1 uppercase tracking-tighter'>
+                       {story.uni}
+                    </p>
+                  </div>
 
-                    {/* Name & University */}
-                    <h3 className='text-sm font-bold text-gray-900 text-center px-2 leading-tight'>
-                      {story.name}
-                    </h3>
-                    <div className='flex items-center gap-1 mt-1 text-indigo-600'>
-                      <FaGraduationCap className='w-3 h-3 flex-shrink-0' />
-                      <p className='text-[11px] font-semibold leading-tight'>{story.uni}</p>
+                  <div className='w-full bg-slate-50 rounded-lg py-1.5 px-2 my-2 border border-slate-100'>
+                    <div className='flex justify-between items-center'>
+                      <span className='text-[8px] uppercase font-bold text-gray-400 tracking-wider'>Grant</span>
+                      <span className='text-[10px] font-black text-emerald-600'>{story.amount}</span>
                     </div>
-                    <p className='text-[9px] text-gray-500 mt-0.5'>{story.country}</p>
+                  </div>
 
-                    {/* Details */}
-                    <div className='space-y-1.5 mt-2 px-2 w-full'>
-                      <div className='flex items-center justify-between px-2 py-1 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg'>
-                        <span className='text-[9px] text-gray-600'>Degree</span>
-                        <span className='text-[9px] font-semibold text-gray-900 text-right leading-tight'>{story.degree}</span>
-                      </div>
-                      <div className='flex items-center justify-between px-2 py-1 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg'>
-                        <span className='text-[9px] text-gray-600'>Award</span>
-                        <span className='text-[10px] font-bold text-green-700'>{story.amount}</span>
-                      </div>
-                    </div>
+                  <div className='relative mb-2'>
+                    <FaQuoteLeft className='text-indigo-200 w-2 h-2 mb-1' />
+                    <p className='text-[9px] md:text-[11px] text-gray-600 leading-tight italic line-clamp-3 px-1'>
+                      {story.quote}
+                    </p>
+                  </div>
 
-                    {/* Quote */}
-                    <div className='relative bg-gray-50 rounded-lg p-2 mt-2 mx-2'>
-                      <FaQuoteLeft className='absolute top-1.5 left-1.5 w-2.5 h-2.5 text-indigo-300' />
-                      <p className='text-[9px] text-gray-700 leading-snug pl-3 italic'>
-                        "{story.quote}"
-                      </p>
-                    </div>
-
-                    {/* Rating */}
-                    <div className='flex items-center justify-center gap-0.5 text-yellow-400 mt-2'>
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className='w-2.5 h-2.5' />
-                      ))}
-                    </div>
+                  <div className='flex gap-0.5 text-yellow-400'>
+                    {[...Array(5)].map((_, i) => <FaStar key={i} className='w-2 h-2' />)}
                   </div>
                 </div>
               </div>
@@ -204,108 +104,63 @@ const SuccessStories = () => {
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className='mt-20 text-center relative z-10'>
-          <div className='inline-flex flex-col sm:flex-row items-center gap-4'>
-            <a
-              href='/all-scholarships'
-              className='px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-gray-900 font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105'
-            >
-              Start Your Journey
-            </a>
-            <a
-              href='/success-stories'
-              className='px-8 py-4 bg-white text-indigo-600 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-md border-2 border-indigo-200'
-            >
-              View All Stories
-            </a>
-          </div>
+        {/* Action Buttons */}
+        <div className='mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 px-6 relative z-10'>
+          <motion.a
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            href='/all-scholarships'
+            className='w-full sm:w-auto px-8 py-4 bg-gray-900 text-white text-xs font-black rounded-xl uppercase tracking-[2px] shadow-xl flex items-center justify-center gap-2 group'
+          >
+            Start My Journey <ArrowRight size={14} className='group-hover:translate-x-1 transition-transform' />
+          </motion.a>
+          
+          <Link
+            to='/success-stories'
+            className='w-full sm:w-auto px-8 py-4 bg-white text-gray-900 text-xs font-black rounded-xl uppercase tracking-[2px] border border-gray-200 hover:bg-gray-50 transition-colors flex items-center justify-center'
+          >
+            Read All Stories
+          </Link>
         </div>
       </Container>
 
-      {/* Custom Styles */}
       <style>{`
         .success-wrapper {
           width: 100%;
-          height: 550px;
+          height: 400px;
           position: relative;
-          text-align: center;
           display: flex;
           align-items: center;
           justify-content: center;
-          overflow: hidden;
+          perspective: 1000px;
         }
-
         .success-inner {
-          --w: 220px;
-          --h: 340px;
-          --translateZ: 400px;
-          --rotateX: -8deg;
-          --perspective: 1400px;
+          --w: 140px; 
+          --h: 220px;
+          --translateZ: 250px;
+          --rotateX: -5deg;
           position: absolute;
           width: var(--w);
           height: var(--h);
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: 2;
           transform-style: preserve-3d;
-          animation: rotating 50s linear infinite;
+          animation: rotating 40s linear infinite;
         }
-
         @keyframes rotating {
-          from {
-            transform: translate(-50%, -50%) perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0);
-          }
-          to {
-            transform: translate(-50%, -50%) perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(1turn);
-          }
+          from { transform: rotateX(var(--rotateX)) rotateY(0); }
+          to { transform: rotateX(var(--rotateX)) rotateY(1turn); }
         }
-
         .success-card {
           position: absolute;
-          border: 2px solid rgba(var(--color-card), 0.6);
-          border-radius: 16px;
-          overflow: hidden;
           inset: 0;
-          background: white;
-          box-shadow: 0 8px 25px rgba(var(--color-card), 0.25);
           transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(var(--translateZ));
-          transition: all 0.3s ease;
           backface-visibility: visible;
         }
-
-        .success-card:hover {
-          box-shadow: 0 12px 35px rgba(var(--color-card), 0.4);
-          border-color: rgba(var(--color-card), 0.9);
-          transform: rotateY(calc((360deg / var(--quantity)) * var(--index))) translateZ(var(--translateZ)) scale(1.05);
-        }
-
-        .card-content {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          background: linear-gradient(135deg, 
-            rgba(var(--color-card), 0.03) 0%, 
-            rgba(var(--color-card), 0.1) 100%
-          );
-        }
-
-        /* Pause animation on hover */
-        .success-wrapper:hover .success-inner {
-          animation-play-state: paused;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-          .success-wrapper {
-            height: 450px;
-          }
-          
+        @media (min-width: 768px) {
+          .success-wrapper { height: 500px; }
           .success-inner {
             --w: 200px;
-            --h: 310px;
-            --translateZ: 350px;
+            --h: 300px;
+            --translateZ: 450px;
           }
         }
       `}</style>
