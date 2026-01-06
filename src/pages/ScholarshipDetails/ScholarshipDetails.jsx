@@ -33,6 +33,7 @@ const ScholarshipDetails = () => {
 
   const selectedRating = useWatch({ control, name: 'rating' });
 
+  // Scholarship Data Fetching
   const { data: scholarship = {}, isLoading, isError } = useQuery({
     queryKey: ['scholarship', id],
     queryFn: async () => {
@@ -42,6 +43,7 @@ const ScholarshipDetails = () => {
     retry: false,
   });
 
+  // Reviews Data Fetching
   const { data: reviewsData = { reviews: [], averageRating: 0, totalReviews: 0 } } = useQuery({
     queryKey: ['reviews', id],
     queryFn: async () => {
@@ -52,6 +54,16 @@ const ScholarshipDetails = () => {
     retry: false,
   });
 
+  const rawReviews = reviewsData.reviews || [];
+
+  
+  const sortedReviews = [...rawReviews].sort((a, b) => {
+    if (user && a.userEmail === user.email) return -1;
+    if (user && b.userEmail === user.email) return 1;
+    return new Date(b.reviewDate) - new Date(a.reviewDate);
+  });
+
+  // Add Review Mutation
   const addReviewMutation = useMutation({
     mutationFn: async (reviewData) => {
       if (!user) throw new Error('User not authenticated');
@@ -63,24 +75,52 @@ const ScholarshipDetails = () => {
       );
       return result.data;
     },
+   
+    onMutate: async (newReview) => {
+      await queryClient.cancelQueries(['reviews', id]);
+      const previousReviews = queryClient.getQueryData(['reviews', id]);
+
+      const optimisticReview = {
+        ...newReview,
+        _id: 'temp-' + Date.now(),
+        reviewDate: new Date().toISOString(),
+        isOptimistic: true,
+      };
+
+      queryClient.setQueryData(['reviews', id], (old) => ({
+        ...old,
+        reviews: [optimisticReview, ...(old?.reviews || [])],
+      }));
+
+      return { previousReviews };
+    },
+    onError: (err, newReview, context) => {
+      queryClient.setQueryData(['reviews', id], context.previousReviews);
+      toast.error('Failed to post review. Try again.');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['reviews', id]);
+      
+      queryClient.invalidateQueries(['my-reviews', user?.email]);
       reset();
       setShowReviewForm(false);
-      toast.success('Thank you for your review!', { icon: '⭐' });
+      toast.success('Thank you for your review! ⭐');
     },
   });
 
   const onSubmitReview = (data) => {
-    if (!user) return toast.error('Please log in first');
+    if (!user) return toast.error('Please log in to review');
+    if (data.rating === 0) return toast.error('Please select a rating');
+
     addReviewMutation.mutate({
       scholarshipId: id,
       scholarshipName: scholarship.scholarshipName,
+      universityName: scholarship.universityName,
       userName: user.displayName || 'Anonymous',
+      userEmail: user.email, 
       userImage: user.photoURL || '',
       ratingPoint: parseInt(data.rating),
-      reviewComment: data.comment,
-      universityName: scholarship.universityName,
+      reviewComment: data.comment.trim(),
       reviewDate: new Date().toISOString()
     });
   };
@@ -107,11 +147,10 @@ const ScholarshipDetails = () => {
   } = scholarship;
 
   const totalCost = Number(applicationFees) + Number(serviceCharge);
-  const reviews = reviewsData.reviews || [];
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
-     
+      {/* Hero Header */}
       <div className="relative h-[350px] md:h-[500px] lg:h-[600px] w-full overflow-hidden">
         <motion.img
           initial={{ scale: 1.1 }}
@@ -132,7 +171,6 @@ const ScholarshipDetails = () => {
 
       <Container>
         <div className="relative -mt-12 md:-mt-20 z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Info */}
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
@@ -141,7 +179,7 @@ const ScholarshipDetails = () => {
                 <PerkCard icon={<GraduationCap className="text-pink-600" />} title="Degree" value={degree} />
                 <PerkCard icon={<Calendar className="text-red-600" />} title="Deadline" value={applicationDeadline ? format(new Date(applicationDeadline), 'MMM dd, yyyy') : 'N/A'} />
               </div>
-              
+
               <div className="mt-10">
                 <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
                   <CheckCircle2 className="text-green-500" /> Description
@@ -151,9 +189,11 @@ const ScholarshipDetails = () => {
             </div>
 
             {/* Reviews Section */}
-            <div className="bg-white rounded-3xl p-6 md:p-10 shadow-xl">
+            <div className="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100">
               <div className="flex justify-between items-center mb-8">
-                <h3 className="text-xl font-bold flex items-center gap-2"><Star className="text-amber-500 fill-amber-500" /> Reviews</h3>
+                <h3 className="text-xl font-bold flex items-center gap-2">
+                  <Star className="text-amber-500 fill-amber-500" /> Student Reviews
+                </h3>
                 {user && (
                   <button onClick={() => setShowReviewForm(!showReviewForm)} className="text-indigo-600 font-semibold text-sm">
                     {showReviewForm ? 'Cancel' : 'Write a Review'}
@@ -177,35 +217,56 @@ const ScholarshipDetails = () => {
                     </div>
                     <textarea 
                       {...register('comment', { required: true, minLength: 10 })}
-                      placeholder="Share your thoughts..." className="w-full p-4 rounded-xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none" rows={3}
+                      placeholder="Share your experience..." 
+                      className="w-full p-4 rounded-xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none" 
+                      rows={3}
                     />
-                    <Button type="submit" label="Post Review" className="w-full" disabled={addReviewMutation.isLoading} />
+                    <Button type="submit" label={addReviewMutation.isPending ? "Posting..." : "Submit Review"} className="w-full" disabled={addReviewMutation.isPending} />
                   </motion.form>
                 )}
               </AnimatePresence>
 
               <div className="space-y-6">
-                {reviews.map((rev) => (
-                  <div key={rev._id} className="border-b border-gray-100 pb-6 last:border-0">
+                {sortedReviews.map((rev) => (
+                  <motion.div 
+                    layout
+                    key={rev._id} 
+                    className={`p-5 rounded-2xl border transition-all ${
+                      user && rev.userEmail === user.email 
+                        ? 'bg-indigo-50/50 border-indigo-200 shadow-sm' 
+                        : 'border-b border-gray-100 last:border-0'
+                    }`}
+                  >
                     <div className="flex gap-4 items-start">
-                      <img src={rev.userImage || '/default-avatar.png'} className="w-10 h-10 rounded-full object-cover" />
-                      <div>
-                        <h4 className="font-bold text-gray-900">{rev.userName}</h4>
+                      <div className="relative">
+                        <img src={rev.userImage || '/default-avatar.png'} className="w-10 h-10 rounded-full object-cover border-2 border-white" />
+                        {user && rev.userEmail === user.email && (
+                          <span className="absolute -bottom-1 -right-1 bg-indigo-600 text-[8px] text-white px-1 rounded font-bold">YOU</span>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center">
+                          <h4 className="font-bold text-gray-900">{rev.userName}</h4>
+                          <span className="text-[10px] text-gray-400">
+                            {rev.reviewDate ? format(new Date(rev.reviewDate), 'MMM dd, yyyy') : ''}
+                          </span>
+                        </div>
                         <div className="flex gap-1 my-1">
                           {[...Array(5)].map((_, i) => (
                             <Star key={i} size={14} className={i < rev.ratingPoint ? 'fill-amber-400 text-amber-400' : 'text-gray-200'} />
                           ))}
                         </div>
                         <p className="text-gray-600 text-sm mt-2">{rev.reviewComment}</p>
+                        {rev.isOptimistic && <p className="text-[10px] text-indigo-500 mt-1 italic">Posting review...</p>}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Sidebar - Application Summary */}
+          {/* Sidebar */}
           <div className="lg:sticky lg:top-24 h-fit">
             <div className="bg-indigo-600 rounded-3xl p-6 md:p-8 text-white shadow-2xl shadow-indigo-200">
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2"><DollarSign /> Cost Summary</h3>
@@ -235,7 +296,7 @@ const ScholarshipDetails = () => {
 };
 
 const PerkCard = ({ icon, title, value }) => (
-  <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-gray-50">
+  <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-gray-100">
     <div className="p-2 bg-white rounded-xl shadow-sm">{icon}</div>
     <div>
       <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{title}</p>
