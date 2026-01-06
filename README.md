@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![ScholarStream Banner](https://i.postimg.cc/Y9XG8YZL/scholarstream-banner.png)
+![ScholarStream Banner](https://i.postimg.cc/Njp2LBTd/Screenshot-(136).png)
 
 **Find Your Perfect Scholarship Match**
 
@@ -631,25 +631,25 @@ GET    /admin/statistics      # Get platform statistics (Admin)
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshot
 
 ### **Homepage**
-![Homepage](https://via.placeholder.com/900x500/6366f1/ffffff?text=ScholarStream+Homepage)
+![Homepage](https://i.postimg.cc/Njp2LBTd/Screenshot-(136).png)
 
 ### **All Scholarships with Filters**
-![Scholarships](https://via.placeholder.com/900x500/8b5cf6/ffffff?text=Advanced+Search+%26+Filters)
+![Scholarships](https://i.postimg.cc/Dfxq8QTx/Screenshot-(137).png)
 
 ### **Scholarship Details**
-![Details](https://via.placeholder.com/900x500/ec4899/ffffff?text=Scholarship+Details+Page)
+![Details](https://i.postimg.cc/ZR7CKcdx/Screenshot-(138).png)
 
 ### **Payment Checkout**
-![Payment](https://via.placeholder.com/900x500/10b981/ffffff?text=Secure+Stripe+Payment)
+![Payment](https://i.postimg.cc/T2bKXrP8/Screenshot-(139).png)
 
 ### **Student Dashboard**
-![Student Dashboard](https://via.placeholder.com/900x500/f59e0b/ffffff?text=Student+Dashboard)
+![Student Dashboard](https://i.postimg.cc/vHzHQXw6/Screenshot-(140).png)
 
 ### **Admin Analytics**
-![Analytics](https://via.placeholder.com/900x500/3b82f6/ffffff?text=Admin+Analytics+Dashboard)
+![Analytics](https://i.postimg.cc/qMMHGTSY/Screenshot-(141).png)
 
 ---
 
